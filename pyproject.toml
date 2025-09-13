@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rag-techlib"
-version = "0.1.1"
+version = "1.2.0"
 description = "An extensible, abstract framework for building Retrieval-Augmented Generation (RAG) systems with unlimited technique possibilities"
 authors = [
     {name = "RAGLib Contributors", email = "mohammad@shamlawi.com"}
