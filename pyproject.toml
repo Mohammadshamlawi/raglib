@@ -3,14 +3,14 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "raglib"
-version = "0.1.0"
-description = "A comprehensive library of RAG (Retrieval-Augmented Generation) techniques with a unified API for research and production"
+name = "rag-techlib"
+version = "0.1.1"
+description = "An extensible, abstract framework for building Retrieval-Augmented Generation (RAG) systems with unlimited technique possibilities"
 authors = [
-    {name = "RAGLib Contributors", email = "contributors@raglib.org"}
+    {name = "RAGLib Contributors", email = "mohammad@shamlawi.com"}
 ]
 maintainers = [
-    {name = "RAGLib Contributors", email = "contributors@raglib.org"}
+    {name = "RAGLib Contributors", email = "mohammad@shamlawi.com"}
 ]
 license = "MIT"
 license-files = ["LICENSE"]
