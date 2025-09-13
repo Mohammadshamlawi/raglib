@@ -32,6 +32,12 @@ on:
         - production
         - staging
 
+# Permissions needed for the workflow
+permissions:
+  contents: write      # Needed to create GitHub releases
+  id-token: write      # Needed for trusted publishing to PyPI
+  packages: read       # Needed to read packages
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -143,14 +149,36 @@ jobs:
         echo "Publishing stable release to PyPI..."
         twine upload dist/* --verbose
 
-    - name: Create GitHub Release (if from tag push)
+    - name: Check if release exists
       if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+      id: check_release
+      run: |
+        TAG_NAME="${{ github.ref_name }}"
+        RELEASE_EXISTS=$(gh release view "$TAG_NAME" --json id --jq '.id' 2>/dev/null || echo "")
+        if [[ -n "$RELEASE_EXISTS" ]]; then
+          echo "release_exists=true" >> $GITHUB_OUTPUT
+          echo "Release for $TAG_NAME already exists (ID: $RELEASE_EXISTS)"
+        else
+          echo "release_exists=false" >> $GITHUB_OUTPUT
+          echo "No release found for $TAG_NAME"
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create GitHub Release (if from tag push)
+      if: >
+        github.event_name == 'push' && 
+        startsWith(github.ref, 'refs/tags/v') && 
+        steps.check_release.outputs.release_exists == 'false'
       uses: softprops/action-gh-release@v1
       with:
+        tag_name: ${{ github.ref_name }}
         files: dist/*
         draft: false
         prerelease: ${{ needs.validate.outputs.is_prerelease == 'true' }}
         generate_release_notes: true
+        make_latest: ${{ needs.validate.outputs.is_prerelease == 'false' }}
+        fail_on_unmatched_files: false
         body: |
           ## 🚀 Release v${{ needs.validate.outputs.version }}
           
@@ -167,6 +195,27 @@ jobs:
           
           ---
           *This release was automatically published to PyPI and documentation was updated.*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Update existing release (if release exists)
+      if: >
+        github.event_name == 'push' && 
+        startsWith(github.ref, 'refs/tags/v') && 
+        steps.check_release.outputs.release_exists == 'true'
+      run: |
+        TAG_NAME="${{ github.ref_name }}"
+        echo "Updating existing release for $TAG_NAME with build artifacts..."
+        
+        # Upload new artifacts to existing release
+        for file in dist/*; do
+          if [[ -f "$file" ]]; then
+            echo "Uploading $file..."
+            gh release upload "$TAG_NAME" "$file" --clobber 2>/dev/null || echo "Failed to upload $file (may already exist)"
+          fi
+        done
+        
+        echo "✅ Updated existing release with new artifacts"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
