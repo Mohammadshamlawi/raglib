@@ -1,7 +1,8 @@
 # RAGLib
 
-[![CI](https://github.com/your-org/raglib/workflows/CI/badge.svg)](https://github.com/your-org/raglib/actions)
-[![PyPI version](https://badge.fury.io/py/raglib.svg)](https://badge.fury.io/py/raglib)
+[![CI](https://github.com/Mohammadshamlawi/raglib/workflows/CI/badge.svg)](https://github.com/Mohammadshamlawi/raglib/actions)
+[![PyPI version](https://badge.fury.io/py/rag-techlib.svg)](https://badge.fury.io/py/rag-techlib)
+[![Documentation Status](https://readthedocs.org/projects/rag-techlib/badge/?version=latest)](https://rag-techlib.readthedocs.io/en/latest/?badge=latest)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -34,13 +35,13 @@ RAGLib is designed around **abstraction** and **extensibility**:
 ### Installation
 
 ```bash
-pip install raglib
+pip install rag-techlib
 
 # For optional dependencies
-pip install raglib[faiss]    # Advanced embeddings and vector search
-pip install raglib[llm]      # LLM integration
-pip install raglib[dev]      # Development tools
-pip install raglib[all]      # Everything
+pip install rag-techlib[faiss]    # Advanced embeddings and vector search
+pip install rag-techlib[llm]      # LLM integration
+pip install rag-techlib[dev]      # Development tools
+pip install rag-techlib[all]      # Everything
 ```
 
 ### Registry-Driven Usage
@@ -242,11 +243,11 @@ print(f"F1 Score: {results['metrics']['f1']:.3f}")
 
 ## 📖 Documentation
 
-- **[Getting Started](https://raglib.readthedocs.io/en/latest/getting_started/)** - Installation and first steps
-- **[Techniques Guide](https://raglib.readthedocs.io/en/latest/techniques/)** - Complete technique catalog  
-- **[API Reference](https://raglib.readthedocs.io/en/latest/api/)** - Detailed API documentation
-- **[Plugin Development](https://raglib.readthedocs.io/en/latest/plugins/)** - Creating custom techniques
-- **[Benchmarking Guide](https://raglib.readthedocs.io/en/latest/benchmarking/)** - Evaluation framework
+- **[Getting Started](https://rag-techlib.readthedocs.io/en/latest/getting_started/)** - Installation and first steps
+- **[Techniques Guide](https://rag-techlib.readthedocs.io/en/latest/techniques/)** - Complete technique catalog  
+- **[API Reference](https://rag-techlib.readthedocs.io/en/latest/api/)** - Detailed API documentation
+- **[Plugin Development](https://rag-techlib.readthedocs.io/en/latest/plugins/)** - Creating custom techniques
+- **[Benchmarking Guide](https://rag-techlib.readthedocs.io/en/latest/benchmarking/)** - Evaluation framework
 
 ## 🛠️ Development
 
@@ -398,7 +399,7 @@ If you use RAGLib in your research, please cite:
   title = {RAGLib: An Extensible Framework for Retrieval-Augmented Generation},
   author = {RAGLib Contributors},
   year = {2025},
-  url = {https://github.com/your-org/raglib},
+  url = {https://github.com/Mohammadshamlawi/raglib},
   note = {An abstract, registry-based library for building RAG systems}
 }
 ```
@@ -407,7 +408,7 @@ If you use RAGLib in your research, please cite:
 
 **RAGLib** - *Building the future of Retrieval-Augmented Generation, one technique at a time.*
 
-🌐 **Website**: https://raglib.readthedocs.io  
-🐛 **Issues**: https://github.com/your-org/raglib/issues  
-💬 **Discussions**: https://github.com/your-org/raglib/discussions  
-📦 **PyPI**: https://pypi.org/project/raglib/
+🌐 **Website**: https://rag-techlib.readthedocs.io  
+🐛 **Issues**: https://github.com/Mohammadshamlawi/raglib/issues  
+💬 **Discussions**: https://github.com/Mohammadshamlawi/raglib/discussions  
+📦 **PyPI**: https://pypi.org/project/rag-techlib/

@@ -49,6 +49,16 @@ llm = [
     "tiktoken>=0.4.0",
     "sentence-transformers>=2.2.0",
 ]
+docs = [
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.0.0",
+    "mkdocs-autorefs>=0.5.0",
+    "mkdocstrings[python]>=0.22.0",
+    "pymdown-extensions>=10.0.0",
+    "griffe>=0.32.0",
+    "Pillow>=9.0.0",
+    "cairosvg>=2.5.0",
+]
 dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
@@ -72,13 +82,13 @@ tests = [
     "pytest-asyncio>=0.21.0",
 ]
 all = [
-    "raglib[faiss,llm,dev,tests]",
+    "rag-techlib[faiss,llm,docs,dev,tests]",
 ]
 
 [project.urls]
 Homepage = "https://github.com/Mohammadshamlawi/raglib"
 Repository = "https://github.com/Mohammadshamlawi/raglib"
-Documentation = "https://raglib.readthedocs.io"
+Documentation = "https://rag-techlib.readthedocs.io"
 "Bug Tracker" = "https://github.com/Mohammadshamlawi/raglib/issues"
 "Changelog" = "https://github.com/Mohammadshamlawi/raglib/blob/main/CHANGELOG.md"
 

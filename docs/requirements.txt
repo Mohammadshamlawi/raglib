@@ -1,0 +1,19 @@
+# Documentation build requirements for Read the Docs
+
+# MkDocs and theme
+mkdocs>=1.5.0
+mkdocs-material>=9.0.0
+
+# Plugins
+mkdocs-autorefs>=0.5.0
+mkdocstrings[python]>=0.22.0
+
+# Extensions
+pymdown-extensions>=10.0.0
+
+# For API documentation generation
+griffe>=0.32.0
+
+# Additional dependencies for documentation
+Pillow>=9.0.0
+cairosvg>=2.5.0

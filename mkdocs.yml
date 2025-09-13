@@ -1,13 +1,13 @@
 site_name: RAGLib Documentation
 site_description: A comprehensive library of RAG (Retrieval-Augmented Generation) techniques with a unified API for research and production
 site_author: RAGLib Contributors
-site_url: https://raglib.readthedocs.io
+site_url: https://rag-techlib.readthedocs.io
 
 docs_dir: docs
 site_dir: site
 
-repo_name: your-org/raglib
-repo_url: https://github.com/your-org/raglib
+repo_name: Mohammadshamlawi/raglib
+repo_url: https://github.com/Mohammadshamlawi/raglib
 edit_uri: edit/main/docs/
 
 theme:
@@ -103,10 +103,10 @@ nav:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/your-org/raglib
+      link: https://github.com/Mohammadshamlawi/raglib
       name: GitHub Repository
     - icon: fontawesome/brands/python
-      link: https://pypi.org/project/raglib/
+      link: https://pypi.org/project/rag-techlib/
       name: PyPI Package
   version:
     provider: mike
