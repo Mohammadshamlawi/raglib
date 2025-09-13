@@ -53,7 +53,7 @@ jobs:
     - name: Install validation dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install build twine toml
+        pip install build twine
 
     - name: Get version from tag or pyproject.toml
       id: get_version
@@ -66,7 +66,8 @@ jobs:
           VERSION=${VERSION#v}
           echo "version=$VERSION" >> $GITHUB_OUTPUT
         else
-          VERSION=$(python -c "import toml; print(toml.load('pyproject.toml')['project']['version'])")
+          # Extract version from pyproject.toml using grep and sed
+          VERSION=$(grep '^version = ' pyproject.toml | sed 's/version = "\(.*\)"/\1/')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
         fi
         echo "Detected version: $VERSION"
