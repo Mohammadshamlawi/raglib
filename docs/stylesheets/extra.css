@@ -1,0 +1,135 @@
+/* Custom CSS for RAGLib Documentation */
+
+/* Grid cards styling */
+.md-typeset .grid.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1rem;
+    margin: 1em 0;
+}
+
+.md-typeset .grid.cards > * {
+    border: 0.05rem solid var(--md-default-fg-color--lightest);
+    border-radius: 0.1rem;
+    display: block;
+    margin: 0;
+    padding: 0.8rem;
+    transition: border 0.25s, box-shadow 0.25s;
+}
+
+.md-typeset .grid.cards > *:focus-within,
+.md-typeset .grid.cards > *:hover {
+    border-color: var(--md-accent-fg-color);
+    box-shadow: var(--md-shadow-z2);
+    transform: translateY(-0.05rem);
+}
+
+/* Code block enhancements */
+.md-typeset .highlight .filename {
+    background: var(--md-code-bg-color);
+    border-bottom: 0.05rem solid var(--md-default-fg-color--lightest);
+    border-radius: 0.1rem 0.1rem 0 0;
+    font-size: 0.85em;
+    font-weight: 700;
+    margin: 0 0 0 0;
+    padding: 0.5em 1.0em;
+    position: sticky;
+    top: 0;
+}
+
+/* Technique category badges */
+.technique-badge {
+    background: var(--md-primary-fg-color--light);
+    border-radius: 0.1rem;
+    color: var(--md-primary-bg-color);
+    font-size: 0.75em;
+    font-weight: 700;
+    padding: 0.1rem 0.3rem;
+    text-transform: uppercase;
+}
+
+.technique-badge--chunking { background: #2196F3; }
+.technique-badge--retrieval { background: #4CAF50; }
+.technique-badge--reranking { background: #FF9800; }
+.technique-badge--generation { background: #9C27B0; }
+.technique-badge--orchestration { background: #F44336; }
+
+/* API documentation styling */
+.md-typeset h3.doc-heading {
+    border-bottom: 0.05rem solid var(--md-default-fg-color--lightest);
+    padding-bottom: 0.5rem;
+}
+
+/* Mermaid diagram styling */
+.mermaid {
+    text-align: center;
+    margin: 1em 0;
+}
+
+/* Admonition icon customization */
+.md-typeset .admonition.tip {
+    border-color: #00bcd4;
+}
+
+.md-typeset .admonition.tip > .admonition-title::before {
+    background-color: #00bcd4;
+    -webkit-mask-image: var(--md-admonition-icon--tip);
+    mask-image: var(--md-admonition-icon--tip);
+}
+
+/* Table styling improvements */
+.md-typeset table:not([class]) {
+    box-shadow: var(--md-shadow-z1);
+    border-radius: 0.1rem;
+    overflow: hidden;
+}
+
+.md-typeset table:not([class]) th {
+    background: var(--md-default-fg-color--lightest);
+    font-weight: 700;
+}
+
+/* Navigation improvements */
+.md-nav__item .md-nav__link--active {
+    font-weight: 700;
+}
+
+/* Search highlighting */
+.md-search-result__teaser mark {
+    background: var(--md-accent-fg-color--transparent);
+    color: var(--md-accent-fg-color);
+}
+
+/* Footer styling */
+.md-footer__inner {
+    padding: 0.2rem 0;
+}
+
+/* Responsive improvements */
+@media screen and (max-width: 76.1875em) {
+    .md-typeset .grid.cards {
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }
+}
+
+@media screen and (max-width: 44.9375em) {
+    .md-typeset .grid.cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .md-typeset .tabbed-set {
+        margin: 0 -0.8rem;
+    }
+}
+
+/* Print styles */
+@media print {
+    .md-typeset .grid.cards {
+        display: block;
+    }
+    
+    .md-typeset .grid.cards > * {
+        break-inside: avoid;
+        margin-bottom: 1rem;
+    }
+}

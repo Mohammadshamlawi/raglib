@@ -1,0 +1,102 @@
+{
+  "timestamp": "2025-09-13 00:21:43",
+  "metrics": {
+    "total_questions": 4,
+    "successful_questions": 4,
+    "success_rate": 1.0,
+    "avg_retrieval_precision": 0.3,
+    "avg_answer_relevance": 0.3,
+    "avg_latency_ms": 0.25,
+    "total_latency_ms": 1
+  },
+  "detailed_results": [
+    {
+      "question": "What is Python known for?",
+      "expected_answer": "simplicity",
+      "expected_chunks": [
+        "Python is a high-level programming language"
+      ],
+      "retrieved_chunks": [
+        "['Python is a high-level programming language known for its simplicity.', 'Machine learning algorith",
+        "interface for retrieval-augmented generation.', 'Vector databases store high-dimensional embeddings ",
+        "cessing helps computers understand human language.', 'RAGLib provides a unified interface for retrie"
+      ],
+      "retrieval_scores": [
+        0.975073881154933,
+        0.9647761112381639,
+        0.9639578496913638
+      ],
+      "answer": "['Python is a high-level programming language known for its simplicity",
+      "success": true,
+      "error": null,
+      "latency_ms": 0
+    },
+    {
+      "question": "How do machine learning algorithms work?",
+      "expected_answer": "learn patterns from data",
+      "expected_chunks": [
+        "Machine learning algorithms can learn patterns"
+      ],
+      "retrieved_chunks": [
+        "['Python is a high-level programming language known for its simplicity.', 'Machine learning algorith",
+        "unking splits text based on meaning rather than length.']",
+        "sks.', 'Cross-encoders rank document pairs for relevance scoring.', 'Semantic chunking splits text b"
+      ],
+      "retrieval_scores": [
+        0.9613215247892302,
+        0.9601452827458282,
+        0.959416464866083
+      ],
+      "answer": "['Python is a high-level programming language known for its simplicity",
+      "success": true,
+      "error": null,
+      "latency_ms": 1
+    },
+    {
+      "question": "What is RAGLib?",
+      "expected_answer": "unified interface for retrieval-augmented generation",
+      "expected_chunks": [
+        "RAGLib provides a unified interface"
+      ],
+      "retrieved_chunks": [
+        "['Python is a high-level programming language known for its simplicity.', 'Machine learning algorith",
+        "for sequence processing.', 'Fine-tuning adapts pre-trained models to specific tasks.', 'Cross-encode",
+        "ne learning algorithms can learn patterns from data automatically.', 'Deep neural networks have mult"
+      ],
+      "retrieval_scores": [
+        0.9501208794703347,
+        0.9475789592378603,
+        0.9463155451892052
+      ],
+      "answer": "['Python is a high-level programming language known for its simplicity",
+      "success": true,
+      "error": null,
+      "latency_ms": 0
+    },
+    {
+      "question": "How do transformers process sequences?",
+      "expected_answer": "attention mechanisms",
+      "expected_chunks": [
+        "Transformer models use attention mechanisms"
+      ],
+      "retrieved_chunks": [
+        "l networks have multiple layers of interconnected nodes.', 'Natural language processing helps comput",
+        "unking splits text based on meaning rather than length.']",
+        "['Python is a high-level programming language known for its simplicity.', 'Machine learning algorith"
+      ],
+      "retrieval_scores": [
+        0.9603693984327464,
+        0.9583306598415946,
+        0.957545776437109
+      ],
+      "answer": "l networks have multiple layers of interconnected nodes.', 'Natural language processing helps comput",
+      "success": true,
+      "error": null,
+      "latency_ms": 0
+    }
+  ],
+  "benchmark_config": {
+    "knowledge_base_size": 10,
+    "qa_pairs_count": 4
+  }
+}

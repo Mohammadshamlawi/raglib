@@ -1,0 +1,30 @@
+[
+  {
+    "query": "What is machine learning?",
+    "result": {
+      "success": false,
+      "error": "'fixed_size_chunker'"
+    }
+  },
+  {
+    "query": "How does deep learning work?",
+    "result": {
+      "success": false,
+      "error": "'fixed_size_chunker'"
+    }
+  },
+  {
+    "query": "What is RAG and how is it useful?",
+    "result": {
+      "success": false,
+      "error": "'fixed_size_chunker'"
+    }
+  },
+  {
+    "query": "Tell me about computer vision",
+    "result": {
+      "success": false,
+      "error": "'fixed_size_chunker'"
+    }
+  }
+]
