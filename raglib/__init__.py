@@ -20,3 +20,7 @@ __version__ = "0.1.0"
 __author__ = "RAGLib Contributors"
 __email__ = "contributors@raglib.org"
 __license__ = "MIT"
+
+# Import techniques to ensure they are registered
+# This triggers the @TechniqueRegistry.register decorators
+from . import techniques  # noqa: F401

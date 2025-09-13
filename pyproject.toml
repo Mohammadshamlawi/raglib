@@ -88,7 +88,7 @@ all = [
 [project.urls]
 Homepage = "https://github.com/Mohammadshamlawi/raglib"
 Repository = "https://github.com/Mohammadshamlawi/raglib"
-Documentation = "https://rag-techlib.readthedocs.io"
+Documentation = "https://raglib.readthedocs.io"
 "Bug Tracker" = "https://github.com/Mohammadshamlawi/raglib/issues"
 "Changelog" = "https://github.com/Mohammadshamlawi/raglib/blob/main/CHANGELOG.md"
 
