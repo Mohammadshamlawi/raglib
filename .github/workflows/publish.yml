@@ -1,0 +1,277 @@
+name: Publish to PyPI and Update Docs
+
+on:
+  # Trigger on new releases
+  release:
+    types: [published]
+  
+  # Trigger on version tags
+  push:
+    tags:
+      - 'v*'
+  
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      publish_to_pypi:
+        description: 'Publish to PyPI'
+        required: true
+        default: true
+        type: boolean
+      update_docs:
+        description: 'Update documentation'
+        required: true
+        default: true
+        type: boolean
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+        - production
+        - staging
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+      is_prerelease: ${{ steps.check_prerelease.outputs.is_prerelease }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install validation dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine toml
+
+    - name: Get version from tag or pyproject.toml
+      id: get_version
+      run: |
+        if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == refs/tags/* ]]; then
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        elif [[ "${{ github.event_name }}" == "release" ]]; then
+          VERSION=${{ github.event.release.tag_name }}
+          VERSION=${VERSION#v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        else
+          VERSION=$(python -c "import toml; print(toml.load('pyproject.toml')['project']['version'])")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        fi
+        echo "Detected version: $VERSION"
+
+    - name: Check if prerelease
+      id: check_prerelease
+      run: |
+        VERSION="${{ steps.get_version.outputs.version }}"
+        if [[ "$VERSION" =~ (alpha|beta|rc|dev) ]]; then
+          echo "is_prerelease=true" >> $GITHUB_OUTPUT
+          echo "This is a prerelease version"
+        else
+          echo "is_prerelease=false" >> $GITHUB_OUTPUT
+          echo "This is a stable release"
+        fi
+
+    - name: Validate package can be built
+      run: |
+        python -m build
+        twine check dist/*
+
+    - name: Run tests
+      run: |
+        pip install -e .[dev,tests]
+        pytest --maxfail=5 -q
+
+  publish-pypi:
+    needs: validate
+    runs-on: ubuntu-latest
+    if: >
+      (github.event_name == 'release' && github.event.action == 'published') ||
+      (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) ||
+      (github.event_name == 'workflow_dispatch' && inputs.publish_to_pypi == 'true')
+    
+    environment:
+      name: ${{ github.event_name == 'workflow_dispatch' && inputs.environment || 'production' }}
+      url: https://pypi.org/project/rag-techlib/
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+
+    - name: Build package
+      run: |
+        python -m build
+
+    - name: Publish to Test PyPI (for prereleases)
+      if: needs.validate.outputs.is_prerelease == 'true'
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        TWINE_REPOSITORY_URL: https://test.pypi.org/legacy/
+      run: |
+        echo "Publishing prerelease to Test PyPI..."
+        twine upload dist/* --verbose
+
+    - name: Publish to PyPI (for stable releases)
+      if: needs.validate.outputs.is_prerelease == 'false'
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+      run: |
+        echo "Publishing stable release to PyPI..."
+        twine upload dist/* --verbose
+
+    - name: Create GitHub Release (if from tag push)
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/*
+        draft: false
+        prerelease: ${{ needs.validate.outputs.is_prerelease == 'true' }}
+        generate_release_notes: true
+        body: |
+          ## 🚀 Release v${{ needs.validate.outputs.version }}
+          
+          ### Installation
+          ```bash
+          pip install rag-techlib==${{ needs.validate.outputs.version }}
+          ```
+          
+          ### PyPI Package
+          📦 [View on PyPI](https://pypi.org/project/rag-techlib/${{ needs.validate.outputs.version }}/)
+          
+          ### Documentation
+          📚 [Read the Docs](https://rag-techlib.readthedocs.io/en/v${{ needs.validate.outputs.version }}/)
+          
+          ---
+          *This release was automatically published to PyPI and documentation was updated.*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  update-docs:
+    needs: [validate, publish-pypi]
+    runs-on: ubuntu-latest
+    if: >
+      always() && 
+      (needs.publish-pypi.result == 'success' || needs.publish-pypi.result == 'skipped') &&
+      ((github.event_name == 'release' && github.event.action == 'published') ||
+       (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) ||
+       (github.event_name == 'workflow_dispatch' && inputs.update_docs == 'true'))
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install documentation dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[docs]"
+
+    - name: Update version in documentation
+      run: |
+        VERSION="${{ needs.validate.outputs.version }}"
+        # Update version references in docs if needed
+        find docs/ -name "*.md" -type f -exec sed -i "s/rag-techlib==.*/rag-techlib==$VERSION/g" {} \;
+
+    - name: Build documentation
+      run: |
+        mkdocs build --verbose
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./site
+        cname: rag-techlib.github.io
+        
+    - name: Trigger Read the Docs build
+      run: |
+        echo "Triggering Read the Docs build..."
+        curl -X POST \
+          -H "Authorization: Token ${{ secrets.RTD_WEBHOOK_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d '{"branch": "main"}' \
+          "https://readthedocs.org/api/v2/webhook/raglib/${{ secrets.RTD_WEBHOOK_ID }}/" || echo "RTD webhook failed - this is expected if webhook is not configured"
+
+    - name: Create documentation deployment summary
+      run: |
+        echo "## 📚 Documentation Updated" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Documentation has been successfully updated for version **${{ needs.validate.outputs.version }}**" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Available at:" >> $GITHUB_STEP_SUMMARY
+        echo "- 🌐 [GitHub Pages](https://rag-techlib.github.io)" >> $GITHUB_STEP_SUMMARY
+        echo "- 📖 [Read the Docs](https://rag-techlib.readthedocs.io)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Build Information:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Version:** ${{ needs.validate.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+
+  notify:
+    needs: [validate, publish-pypi, update-docs]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Create deployment summary
+      run: |
+        echo "## 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Version: ${{ needs.validate.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [[ "${{ needs.publish-pypi.result }}" == "success" ]]; then
+          echo "✅ **PyPI Publication:** Success" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ needs.validate.outputs.is_prerelease }}" == "true" ]]; then
+            echo "   - Published to Test PyPI (prerelease)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "   - Published to PyPI (stable)" >> $GITHUB_STEP_SUMMARY
+          fi
+        elif [[ "${{ needs.publish-pypi.result }}" == "skipped" ]]; then
+          echo "⏭️ **PyPI Publication:** Skipped" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ **PyPI Publication:** Failed" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        if [[ "${{ needs.update-docs.result }}" == "success" ]]; then
+          echo "✅ **Documentation Update:** Success" >> $GITHUB_STEP_SUMMARY
+        elif [[ "${{ needs.update-docs.result }}" == "skipped" ]]; then
+          echo "⏭️ **Documentation Update:** Skipped" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ **Documentation Update:** Failed" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Links:" >> $GITHUB_STEP_SUMMARY
+        echo "- 📦 [PyPI Package](https://pypi.org/project/rag-techlib/)" >> $GITHUB_STEP_SUMMARY
+        echo "- 📚 [Documentation](https://rag-techlib.readthedocs.io)" >> $GITHUB_STEP_SUMMARY
+        echo "- 🏠 [GitHub Pages](https://rag-techlib.github.io)" >> $GITHUB_STEP_SUMMARY

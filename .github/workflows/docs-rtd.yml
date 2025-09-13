@@ -1,0 +1,172 @@
+name: Update Read the Docs
+
+on:
+  # Trigger on main branch pushes (documentation updates)
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - '.readthedocs.yaml'
+      - 'pyproject.toml'
+  
+  # Trigger on new releases
+  release:
+    types: [published]
+  
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description: 'Force complete rebuild of documentation'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  update-rtd:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[docs]"
+
+    - name: Validate documentation build
+      run: |
+        echo "Validating documentation can be built..."
+        mkdocs build --verbose --strict
+
+    - name: Get current version
+      id: get_version
+      run: |
+        VERSION=$(python -c "import toml; print(toml.load('pyproject.toml')['project']['version'])")
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Current version: $VERSION"
+
+    - name: Trigger Read the Docs build via webhook
+      env:
+        RTD_WEBHOOK_TOKEN: ${{ secrets.RTD_WEBHOOK_TOKEN }}
+        RTD_WEBHOOK_ID: ${{ secrets.RTD_WEBHOOK_ID }}
+      run: |
+        if [[ -n "$RTD_WEBHOOK_TOKEN" && -n "$RTD_WEBHOOK_ID" ]]; then
+          echo "Triggering Read the Docs build via webhook..."
+          
+          # Determine which branch/version to build
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            BRANCH_OR_TAG="${{ github.event.release.tag_name }}"
+          else
+            BRANCH_OR_TAG="${{ github.ref_name }}"
+          fi
+          
+          # Trigger the webhook
+          RESPONSE=$(curl -s -w "%{http_code}" -X POST \
+            -H "Authorization: Token $RTD_WEBHOOK_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"branch\": \"$BRANCH_OR_TAG\"}" \
+            "https://readthedocs.org/api/v2/webhook/raglib/$RTD_WEBHOOK_ID/")
+          
+          HTTP_CODE="${RESPONSE: -3}"
+          RESPONSE_BODY="${RESPONSE%???}"
+          
+          echo "HTTP Response Code: $HTTP_CODE"
+          echo "Response Body: $RESPONSE_BODY"
+          
+          if [[ "$HTTP_CODE" -ge 200 && "$HTTP_CODE" -lt 300 ]]; then
+            echo "✅ Successfully triggered Read the Docs build"
+          else
+            echo "❌ Failed to trigger Read the Docs build (HTTP $HTTP_CODE)"
+            echo "This might be expected if RTD webhook is not configured"
+          fi
+        else
+          echo "⚠️ RTD webhook credentials not found. Please configure:"
+          echo "  - RTD_WEBHOOK_TOKEN: Your Read the Docs integration token"
+          echo "  - RTD_WEBHOOK_ID: Your Read the Docs webhook ID"
+          echo ""
+          echo "You can find these in your Read the Docs project settings under Integrations."
+        fi
+
+    - name: Trigger Read the Docs build via API (alternative)
+      if: env.RTD_API_TOKEN != ''
+      env:
+        RTD_API_TOKEN: ${{ secrets.RTD_API_TOKEN }}
+      run: |
+        echo "Triggering Read the Docs build via API..."
+        
+        # Get project slug (assuming it matches repository name)
+        PROJECT_SLUG="raglib"
+        
+        # Trigger build via API
+        RESPONSE=$(curl -s -w "%{http_code}" -X POST \
+          -H "Authorization: Token $RTD_API_TOKEN" \
+          -H "Content-Type: application/json" \
+          "https://readthedocs.org/api/v3/projects/$PROJECT_SLUG/versions/latest/builds/")
+        
+        HTTP_CODE="${RESPONSE: -3}"
+        RESPONSE_BODY="${RESPONSE%???}"
+        
+        echo "API Response Code: $HTTP_CODE"
+        echo "Response Body: $RESPONSE_BODY"
+        
+        if [[ "$HTTP_CODE" -ge 200 && "$HTTP_CODE" -lt 300 ]]; then
+          echo "✅ Successfully triggered Read the Docs build via API"
+        else
+          echo "❌ Failed to trigger Read the Docs build via API (HTTP $HTTP_CODE)"
+        fi
+
+    - name: Wait and verify Read the Docs build
+      run: |
+        echo "Waiting for Read the Docs to process the build request..."
+        sleep 30
+        
+        # Check if the documentation is accessible
+        RTD_URL="https://rag-techlib.readthedocs.io"
+        
+        echo "Checking Read the Docs availability at: $RTD_URL"
+        
+        HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$RTD_URL" || echo "000")
+        
+        if [[ "$HTTP_STATUS" == "200" ]]; then
+          echo "✅ Read the Docs is accessible"
+        else
+          echo "⚠️ Read the Docs returned HTTP $HTTP_STATUS (may still be building)"
+        fi
+
+    - name: Update GitHub Pages (as backup)
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./site
+        commit_message: 'Update documentation for version ${{ steps.get_version.outputs.version }}'
+        
+    - name: Create summary
+      run: |
+        echo "## 📚 Read the Docs Update Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Documentation Update Details:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Version:** ${{ steps.get_version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Available Documentation:" >> $GITHUB_STEP_SUMMARY
+        echo "- 📖 [Read the Docs](https://rag-techlib.readthedocs.io)" >> $GITHUB_STEP_SUMMARY
+        echo "- 🏠 [GitHub Pages](https://rag-techlib.github.io)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Setup Instructions:" >> $GITHUB_STEP_SUMMARY
+        echo "If this is the first time setting up Read the Docs integration:" >> $GITHUB_STEP_SUMMARY
+        echo "1. Go to [Read the Docs](https://readthedocs.org)" >> $GITHUB_STEP_SUMMARY
+        echo "2. Import your project: \`raglib\`" >> $GITHUB_STEP_SUMMARY
+        echo "3. Configure webhook in RTD project settings" >> $GITHUB_STEP_SUMMARY
+        echo "4. Add secrets \`RTD_WEBHOOK_TOKEN\` and \`RTD_WEBHOOK_ID\` to GitHub" >> $GITHUB_STEP_SUMMARY

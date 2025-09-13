@@ -1,9 +1,20 @@
-name: Release
+name: Release (Legacy)
+
+# This workflow is kept for compatibility but the main release process
+# should now use the 'publish.yml' workflow which handles both PyPI and docs
 
 on:
-  push:
-    tags:
-      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name for the release (e.g., v1.0.0)'
+        required: true
+        type: string
+      draft:
+        description: 'Create as draft release'
+        required: false
+        default: true
+        type: boolean
 
 jobs:
   release:
@@ -34,33 +45,41 @@ jobs:
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
+        tag_name: ${{ inputs.tag_name }}
         files: dist/*
-        draft: true
+        draft: ${{ inputs.draft }}
         generate_release_notes: true
         body: |
           ## Release Notes
           
-          This is an automated release draft. Please:
-          1. Review the generated release notes
-          2. Add any additional context or breaking changes
-          3. Publish the release when ready
+          This is a ${{ inputs.draft && 'draft' || 'manual' }} release created via the legacy workflow.
+          
+          **Note:** For automatic PyPI publishing and documentation updates,
+          use the main publish workflow by creating and publishing a release
+          or pushing a version tag.
           
           ## Installation
           
           ```bash
-          pip install raglib==${{ github.ref_name }}
+          pip install rag-techlib==${{ inputs.tag_name }}
           ```
           
           ## Files
-          - `raglib-*.tar.gz` - Source distribution
-          - `raglib-*.whl` - Python wheel
+          - `rag_techlib-*.tar.gz` - Source distribution
+          - `rag_techlib-*.whl` - Python wheel
+          
+          ## Next Steps
+          
+          If this is a final release:
+          1. Ensure the release is published (not draft)
+          2. The main publish workflow will automatically handle PyPI and docs
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Publish to PyPI
-      if: ${{ !contains(github.ref, 'rc') && !contains(github.ref, 'dev') }}
-      env:
-        TWINE_USERNAME: __token__
-        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+    - name: Manual PyPI publication warning
       run: |
-        twine upload dist/*
+        echo "⚠️ IMPORTANT: Manual PyPI publication from this workflow is disabled."
+        echo "The main 'publish.yml' workflow will handle PyPI publication automatically"
+        echo "when you publish the GitHub release or push a version tag."
+        echo ""
+        echo "To publish to PyPI manually, use the 'publish.yml' workflow_dispatch."
