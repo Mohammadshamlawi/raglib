@@ -206,13 +206,6 @@ jobs:
       run: |
         mkdocs build --verbose
 
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./site
-        cname: rag-techlib.github.io
-        
     - name: Trigger Read the Docs build
       run: |
         echo "Triggering Read the Docs build..."
@@ -229,8 +222,8 @@ jobs:
         echo "Documentation has been successfully updated for version **${{ needs.validate.outputs.version }}**" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Available at:" >> $GITHUB_STEP_SUMMARY
-        echo "- 🌐 [GitHub Pages](https://rag-techlib.github.io)" >> $GITHUB_STEP_SUMMARY
         echo "- 📖 [Read the Docs](https://rag-techlib.readthedocs.io)" >> $GITHUB_STEP_SUMMARY
+        echo "- 🌐 [GitHub Pages](https://rag-techlib.github.io) (updated by docs workflow)" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Build Information:" >> $GITHUB_STEP_SUMMARY
         echo "- **Version:** ${{ needs.validate.outputs.version }}" >> $GITHUB_STEP_SUMMARY

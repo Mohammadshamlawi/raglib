@@ -144,13 +144,6 @@ jobs:
           echo "⚠️ Read the Docs returned HTTP $HTTP_STATUS (may still be building)"
         fi
 
-    - name: Update GitHub Pages (as backup)
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./site
-        commit_message: 'Update documentation for version ${{ steps.get_version.outputs.version }}'
-        
     - name: Create summary
       run: |
         echo "## 📚 Read the Docs Update Summary" >> $GITHUB_STEP_SUMMARY
@@ -162,8 +155,8 @@ jobs:
         echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Available Documentation:" >> $GITHUB_STEP_SUMMARY
-        echo "- 📖 [Read the Docs](https://rag-techlib.readthedocs.io)" >> $GITHUB_STEP_SUMMARY
-        echo "- 🏠 [GitHub Pages](https://rag-techlib.github.io)" >> $GITHUB_STEP_SUMMARY
+        echo "- 📖 [Read the Docs](https://rag-techlib.readthedocs.io) (triggered by this workflow)" >> $GITHUB_STEP_SUMMARY
+        echo "- 🏠 [GitHub Pages](https://rag-techlib.github.io) (updated by docs workflow)" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Setup Instructions:" >> $GITHUB_STEP_SUMMARY
         echo "If this is the first time setting up Read the Docs integration:" >> $GITHUB_STEP_SUMMARY
