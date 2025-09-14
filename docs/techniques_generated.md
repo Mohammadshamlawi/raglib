@@ -2,23 +2,10 @@
 
 ---
 
-**Total Techniques:** 13
-**Categories:** 6
+**Total Techniques:** 9
+**Categories:** 4
 
 ### Chunking
-
-#### demo_fixed_chunker
-
-**Simple fixed-size character chunker for demos and tests.**
-
-| Property | Value |
-|----------|-------|
-| Version | `1.0.0` |
-| Class | `DemoFixedChunker` |
-| Module | `raglib.techniques.demo_fixed_chunker` |
-| Dependencies | None |
-
----
 
 #### fixed_size_chunker
 
@@ -87,21 +74,6 @@
 
 ---
 
-### Generation
-
-#### llm_generator
-
-**LLM text generation with deterministic fallback**
-
-| Property | Value |
-|----------|-------|
-| Version | `1.0.0` |
-| Class | `LLMGenerator` |
-| Module | `raglib.techniques.llm_generator` |
-| Dependencies | None |
-
----
-
 ### Core-Retrieval
 
 #### bm25_retriever
@@ -143,19 +115,6 @@
 
 ---
 
-#### inmemory_dense
-
-**In-memory dense retriever using adapters for embedder and vectorstore.**
-
-| Property | Value |
-|----------|-------|
-| Version | `1.0.0` |
-| Class | `InMemoryDenseRetriever` |
-| Module | `raglib.techniques.dummy_dense` |
-| Dependencies | None |
-
----
-
 ### Retrieval Enhancement
 
 #### hyde_generator
@@ -167,21 +126,6 @@
 | Version | `1.0.0` |
 | Class | `HyDE` |
 | Module | `raglib.techniques.hyde` |
-| Dependencies | None |
-
----
-
-### Utility
-
-#### echo_technique
-
-**Echoes the input payload back as TechniqueResult.**
-
-| Property | Value |
-|----------|-------|
-| Version | `1.0.0` |
-| Class | `EchoTechnique` |
-| Module | `raglib.techniques.echo_technique` |
 | Dependencies | None |
 
 ---

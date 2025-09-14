@@ -1,7 +1,8 @@
+from raglib.core import TechniqueResult
+from raglib.schemas import Chunk, Document
 from raglib.techniques.bm25_production import BM25Retriever
 from raglib.techniques.dense_retriever import DenseRetriever
-from raglib.schemas import Document, Chunk
-from raglib.core import TechniqueResult
+
 
 def test_bm25_retriever_works_with_corpus_on_apply():
     docs = [

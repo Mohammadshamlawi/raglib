@@ -1,6 +1,8 @@
 import pytest
+
 from raglib.core import RAGTechnique, TechniqueMeta, TechniqueResult
 from raglib.registry import TechniqueRegistry
+
 
 def test_rag_abstract_cannot_instantiate():
     # RAGTechnique is abstract; attempting to instantiate should raise a TypeError

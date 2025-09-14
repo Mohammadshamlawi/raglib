@@ -11,10 +11,12 @@ If you prefer pre-indexing:
     retriever = BM25Retriever(docs=my_docs)
     result = retriever.apply(query="banana", top_k=5)
 """
-from typing import Any, Sequence, Union
+from collections.abc import Sequence
+from typing import Any, Union
+
 from ..core import RAGTechnique, TechniqueMeta
-from ..schemas import Document
 from ..registry import TechniqueRegistry
+from ..schemas import Document
 from .bm25_simple import BM25Simple  # reuse toy BM25 implementation internally
 
 

@@ -4,8 +4,9 @@ This module implements cross-encoder re-ranking that scores (query, document) pa
 Supports both LLM adapter-backed and deterministic lexical fallback modes.
 """
 
-from typing import Any, Optional, List, Callable
 import re
+from typing import Any, Callable, List, Optional
+
 from ..core import RAGTechnique, TechniqueMeta, TechniqueResult
 from ..registry import TechniqueRegistry
 from ..schemas import Hit
@@ -23,13 +24,13 @@ def _lexical_overlap_score(query: str, doc_text: str) -> float:
     """
     if not query or not doc_text:
         return 0.0
-        
+
     query_tokens = set(_tokenize(query))
     doc_tokens = set(_tokenize(doc_text))
-    
+
     if not query_tokens:
         return 0.0
-        
+
     overlap = len(query_tokens & doc_tokens)
     return overlap / len(query_tokens)
 
@@ -51,7 +52,7 @@ def _parse_score_from_llm_output(output: str) -> float:
             return max(0.0, min(1.0, score))
         except ValueError:
             pass
-    
+
     # Map ordinal terms to scores (check longer phrases first)
     output_lower = output.lower()
     if any(phrase in output_lower for phrase in ['excellent', 'perfect', 'very high']):
@@ -64,7 +65,7 @@ def _parse_score_from_llm_output(output: str) -> float:
         return 0.5
     elif any(phrase in output_lower for phrase in ['low', 'poor', 'bad']):
         return 0.3
-    
+
     # Default fallback
     return 0.0
 
@@ -78,10 +79,10 @@ class CrossEncoderReRanker(RAGTechnique):
         scoring_prompt_template: Template for LLM scoring prompts
         fallback_scoring_fn: Optional deterministic fallback scorer
     """
-    
+
     meta = TechniqueMeta(
         name="crossencoder_reranker",
-        category="reranking", 
+        category="reranking",
         description="Cross-encoder re-ranking using pairwise (query, document) scoring"
     )
 
@@ -131,7 +132,7 @@ class CrossEncoderReRanker(RAGTechnique):
         hits = None
         query = None
         top_k = 5
-        
+
         # Handle positional args
         if len(args) >= 1:
             hits = args[0]
@@ -139,26 +140,26 @@ class CrossEncoderReRanker(RAGTechnique):
             query = args[1]
         if len(args) >= 3:
             top_k = args[2]
-            
+
         # Handle keyword args
         hits = kwargs.get('hits', hits)
         query = kwargs.get('query', query)
         top_k = kwargs.get('top_k', top_k)
-        
+
         # Validate inputs
         if not hits:
             return TechniqueResult(success=True, payload={"hits": []})
-            
+
         if not query:
             # If no query, return hits unchanged (or empty)
             return TechniqueResult(success=True, payload={"hits": hits[:top_k]})
-        
+
         # Score each hit
         scored_hits = []
         for hit in hits:
             doc_text = self._get_document_text(hit)
             score = self._score_pair(query, doc_text)
-            
+
             # Create a new hit with cross-encoder score
             # Store original score and add cross-encoder score to meta
             new_hit = Hit(
@@ -172,13 +173,13 @@ class CrossEncoderReRanker(RAGTechnique):
                 }
             )
             scored_hits.append(new_hit)
-        
+
         # Sort by cross-encoder score (descending) with deterministic tie-breaking
         scored_hits.sort(key=lambda h: (-h.score, h.doc_id))
-        
+
         # Return top_k results
         selected_hits = scored_hits[:top_k]
-        
+
         return TechniqueResult(
             success=True,
             payload={"hits": selected_hits},

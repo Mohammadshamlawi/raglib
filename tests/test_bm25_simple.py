@@ -1,6 +1,6 @@
-from raglib.techniques.bm25_simple import BM25Simple
-from raglib.schemas import Document
 from raglib.core import TechniqueResult
+from raglib.schemas import Document
+from raglib.techniques.bm25_simple import BM25Simple
 
 
 def test_bm25_simple_rank_order():

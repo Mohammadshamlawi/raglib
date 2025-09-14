@@ -7,14 +7,15 @@ via regex to split words and a common BM25 scoring formula.
 Returns a TechniqueResult with payload {"hits": List[Hit]} where Hit.doc_id is set
 and Hit.chunk is None for doc-level retrieval.
 """
-from typing import Any, Dict, List, Sequence, Tuple, Union
 import math
 import re
 from collections import defaultdict
+from collections.abc import Sequence
+from typing import Any, Dict, List, Tuple, Union
 
 from ..core import RAGTechnique, TechniqueMeta, TechniqueResult
-from ..schemas import Document, Hit
 from ..registry import TechniqueRegistry
+from ..schemas import Document, Hit
 
 _WORD_RE = re.compile(r"\w+")
 

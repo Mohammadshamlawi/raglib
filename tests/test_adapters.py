@@ -1,6 +1,7 @@
 from raglib.adapters.dummy_embedder import DummyEmbedder
 from raglib.adapters.inmemory_vectorstore import InMemoryVectorStore
 
+
 def test_dummy_embedder_deterministic():
     embed = DummyEmbedder(dim=8)
     v1 = embed.embed(["hello world"])[0]

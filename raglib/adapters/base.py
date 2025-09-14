@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import List, Sequence, Any, Dict, Optional, Tuple
+from collections.abc import Sequence
+from typing import Any, Dict, List, Optional, Tuple
 
 
 class EmbedderAdapter(ABC):

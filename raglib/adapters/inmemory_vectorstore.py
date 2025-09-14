@@ -7,8 +7,9 @@ Very small, dependency-free vector store for tests and examples. Stores:
 
 Search uses cosine similarity over stored vectors (linear scan).
 """
-from typing import Sequence, List, Tuple, Dict, Optional
 import math
+from collections.abc import Sequence
+from typing import Dict, List, Optional, Tuple
 
 from .base import VectorStoreAdapter
 
