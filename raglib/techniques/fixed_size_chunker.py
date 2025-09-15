@@ -16,7 +16,7 @@ class FixedSizeChunker(RAGTechnique):
     """
 
     meta = TechniqueMeta(
-        name="fixed_size_chunker",
+        name="Fixed-Size Chunking",
         category="chunking",
         description="Fixed-size text chunking with overlap support"
     )

@@ -9,7 +9,7 @@ from raglib.registry import TechniqueRegistry
 from raglib.schemas import Document
 
 # Import techniques to ensure they are registered
-from raglib.techniques.bm25_simple import BM25Simple  # noqa: F401
+from raglib.techniques.bm25 import BM25  # noqa: F401
 
 
 class TestBenchmarkHarness:
@@ -85,13 +85,13 @@ class TestBenchmarkHarness:
             Document(id="2", text="Another test document for evaluation")
         ]
 
-        # Use a simple technique (bm25_simple is always available)
+        # Use a simple technique (BM25 is always available)
         available_techniques = TechniqueRegistry.list()
-        if "bm25_simple" not in available_techniques:
-            pytest.skip("bm25_simple not available")
-
-        technique = TechniqueRegistry.get("bm25_simple")
-
+        if "BM25 (Best Matching 25)" not in available_techniques:
+            pytest.skip("BM25 not available")
+        
+        technique = TechniqueRegistry.get("BM25 (Best Matching 25)")
+        
         # Run benchmark
         harness = BenchmarkHarness(quick_mode=True, verbose=False)
         result = harness.run_benchmark(
@@ -104,7 +104,7 @@ class TestBenchmarkHarness:
         # Validate result structure
         assert "timestamp" in result
         assert "technique" in result
-        assert result["technique"] == "bm25_simple"
+        assert result["technique"] == "BM25 (Best Matching 25)"
         assert "metrics" in result
         assert "exact_match" in result["metrics"]
         assert "f1" in result["metrics"]
@@ -129,10 +129,10 @@ class TestBenchmarkHarness:
 
         # Use echo technique
         available_techniques = TechniqueRegistry.list()
-        if "bm25_simple" not in available_techniques:
-            pytest.skip("bm25_simple not available")
+        if "BM25 (Best Matching 25)" not in available_techniques:
+            pytest.skip("BM25 not available")
 
-        technique = TechniqueRegistry.get("bm25_simple")
+        technique = TechniqueRegistry.get("BM25 (Best Matching 25)")
 
         # Run benchmark with output
         output_file = tmp_path / "results.json"
@@ -196,10 +196,10 @@ class TestBenchmarkHarness:
 
         # Use echo technique
         available_techniques = TechniqueRegistry.list()
-        if "bm25_simple" not in available_techniques:
-            pytest.skip("bm25_simple not available")
+        if "BM25 (Best Matching 25)" not in available_techniques:
+            pytest.skip("BM25 not available")
 
-        technique = TechniqueRegistry.get("bm25_simple")
+        technique = TechniqueRegistry.get("BM25 (Best Matching 25)")
 
         # Run in quick mode
         harness = BenchmarkHarness(quick_mode=True, verbose=False)
@@ -215,10 +215,10 @@ class TestBenchmarkHarness:
 
     def test_error_handling(self, tmp_path):
         """Test error handling in benchmark harness."""
-        # Check if bm25_simple is available
+        # Check if BM25 is available
         available_techniques = TechniqueRegistry.list()
-        if "bm25_simple" not in available_techniques:
-            pytest.skip("bm25_simple not available")
+        if "BM25 (Best Matching 25)" not in available_techniques:
+            pytest.skip("BM25 not available")
 
         # Test with non-existent dataset
         harness = BenchmarkHarness(verbose=False)
@@ -227,7 +227,7 @@ class TestBenchmarkHarness:
         # This should raise an error
         with pytest.raises(FileNotFoundError):
             harness.run_benchmark(
-                technique=TechniqueRegistry.get("bm25_simple"),
+                technique=TechniqueRegistry.get("BM25 (Best Matching 25)"),
                 dataset_path=tmp_path / "nonexistent.jsonl",
                 corpus_docs=corpus
             )

@@ -2,12 +2,12 @@
 
 ---
 
-**Total Techniques:** 9
-**Categories:** 4
+**Total Techniques:** 8
+**Categories:** 5
 
 ### Chunking
 
-#### fixed_size_chunker
+#### Fixed-Size Chunking
 
 **Fixed-size text chunking with overlap support**
 
@@ -20,7 +20,7 @@
 
 ---
 
-#### semantic_chunker
+#### Semantic Chunking
 
 **Semantic similarity-based chunking with configurable embedder**
 
@@ -33,7 +33,7 @@
 
 ---
 
-#### sentence_window_chunker
+#### Sentence Window Retrieval
 
 **Sentence-based windowing with configurable window size and overlap**
 
@@ -48,7 +48,7 @@
 
 ### Reranking
 
-#### crossencoder_reranker
+#### Cross-Encoder Re-Ranking
 
 **Cross-encoder re-ranking using pairwise (query, document) scoring**
 
@@ -61,7 +61,7 @@
 
 ---
 
-#### mmr_reranker
+#### Maximal Marginal Relevance (MMR)
 
 **Maximal Marginal Relevance re-ranking for balancing relevance and diversity**
 
@@ -76,33 +76,7 @@
 
 ### Core-Retrieval
 
-#### bm25_retriever
-
-**Production-friendly BM25 retriever (wrapper over BM25Simple).**
-
-| Property | Value |
-|----------|-------|
-| Version | `1.0.0` |
-| Class | `BM25Retriever` |
-| Module | `raglib.techniques.bm25_production` |
-| Dependencies | None |
-
----
-
-#### bm25_simple
-
-**Toy BM25 retriever (pure python, dependency-free).**
-
-| Property | Value |
-|----------|-------|
-| Version | `1.0.0` |
-| Class | `BM25Simple` |
-| Module | `raglib.techniques.bm25_simple` |
-| Dependencies | None |
-
----
-
-#### dense_retriever
+#### Dense Retrieval / Vector Search (e.g., DPR)
 
 **Production-friendly dense retriever with optional adapters fallback.**
 
@@ -117,7 +91,7 @@
 
 ### Retrieval Enhancement
 
-#### hyde_generator
+#### Hypothetical Document Embeddings (HyDE)
 
 **Generate hypothetical documents to improve retrieval**
 
@@ -126,6 +100,21 @@
 | Version | `1.0.0` |
 | Class | `HyDE` |
 | Module | `raglib.techniques.hyde` |
+| Dependencies | None |
+
+---
+
+### Sparse-Retrieval
+
+#### BM25 (Best Matching 25)
+
+**BM25 ranking function for text retrieval with in-memory indexing**
+
+| Property | Value |
+|----------|-------|
+| Version | `1.0.0` |
+| Class | `BM25` |
+| Module | `raglib.techniques.bm25` |
 | Dependencies | None |
 
 ---

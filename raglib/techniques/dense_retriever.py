@@ -24,7 +24,7 @@ from ..schemas import Chunk, Hit
 @TechniqueRegistry.register
 class DenseRetriever(RAGTechnique):
     meta = TechniqueMeta(
-        name="dense_retriever",
+        name="Dense Retrieval / Vector Search (e.g., DPR)",
         category="core-retrieval",
         description="Production-friendly dense retriever with optional adapters fallback."
     )

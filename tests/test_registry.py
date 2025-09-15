@@ -1,9 +1,9 @@
 from raglib.registry import TechniqueRegistry
-from raglib.techniques.bm25_simple import BM25Simple
+from raglib.techniques.bm25 import BM25
 
 
-def test_bm25_simple_auto_registered():
+def test_bm25_auto_registered():
     registry = TechniqueRegistry.list()
-    assert "bm25_simple" in registry
-    klass = registry["bm25_simple"]
-    assert klass is BM25Simple
+    assert "BM25 (Best Matching 25)" in registry
+    klass = registry["BM25 (Best Matching 25)"]
+    assert klass is BM25

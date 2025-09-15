@@ -35,7 +35,7 @@ class HyDE(RAGTechnique):
     """
 
     meta = TechniqueMeta(
-        name="hyde_generator",
+        name="Hypothetical Document Embeddings (HyDE)",
         category="retrieval_enhancement",
         description="Generate hypothetical documents to improve retrieval",
         tags={"type": "hypothesis_generation", "fallback": "deterministic"}

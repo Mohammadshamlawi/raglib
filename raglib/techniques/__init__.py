@@ -1,7 +1,6 @@
 # techniques package — updated to include production-friendly technique modules
 __all__ = [
-    "bm25_simple",
-    "bm25_production",
+    "bm25",
     "dense_retriever",
     "fixed_size_chunker",
     "sentence_window_chunker",
@@ -12,8 +11,7 @@ __all__ = [
 ]
 
 # convenient imports (optional)
-from .bm25_production import BM25Retriever  # noqa: F401
-from .bm25_simple import BM25Simple  # noqa: F401
+from .bm25 import BM25  # noqa: F401
 from .crossencoder_rerank import CrossEncoderReRanker  # noqa: F401
 from .dense_retriever import DenseRetriever  # noqa: F401
 from .fixed_size_chunker import FixedSizeChunker  # noqa: F401
