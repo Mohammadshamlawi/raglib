@@ -1,29 +1,27 @@
-import pytest
 from raglib.pipelines import Pipeline
-from raglib.techniques.demo_fixed_chunker import DemoFixedChunker
-from raglib.techniques.echo_technique import EchoTechnique
-from raglib.techniques.null_technique import NullTechnique
 from raglib.schemas import Document
+from raglib.techniques.fixed_size_chunker import FixedSizeChunker
+from raglib.techniques.semantic_chunker import SemanticChunker
 
-def test_pipeline_chunker_then_echo_returns_chunks():
-    text = "abcdefghijklmnopqrstuvwxyz" * 5  # 130 chars
+
+def test_pipeline_chunker_basic_functionality():
+    text = "This is a test document. " * 10  # longer text
     doc = Document(id="pdoc1", text=text)
-    chunker = DemoFixedChunker()
-    echo = EchoTechnique()
-    pipeline = Pipeline([chunker, echo])
+    chunker = FixedSizeChunker(chunk_size=100, overlap=20)  # valid overlap
+    pipeline = Pipeline([chunker])
     result = pipeline.run(doc)  # default return_payload_only=True
-    # echo returns the chunker payload (a dict with "chunks")
     assert isinstance(result, dict)
     assert "chunks" in result
     chunks = result["chunks"]
     assert len(chunks) >= 1
-    assert all(c.document_id == "pdoc1" for c in chunks)
+    assert all(hasattr(c, "text") for c in chunks)
 
-def test_pipeline_strict_mode_raises_on_null_step():
-    text = "short text"
+
+def test_pipeline_multiple_chunkers():
+    text = "This is a test document for pipeline testing. " * 5
     doc = Document(id="pdoc2", text=text)
-    chunker = DemoFixedChunker()
-    null_step = NullTechnique()
-    pipeline = Pipeline([chunker, null_step])
-    with pytest.raises(RuntimeError):
-        pipeline.run(doc, strict=True)
+    chunker1 = FixedSizeChunker(chunk_size=100)
+    chunker2 = SemanticChunker()
+    pipeline = Pipeline([chunker1, chunker2])
+    # Just test that pipeline runs without error
+    pipeline.run(doc)

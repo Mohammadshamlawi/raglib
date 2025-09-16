@@ -4,9 +4,10 @@ This module provides a FiD-style orchestrator that combines retrieval and genera
 in a way that processes multiple retrieved contexts either separately or concatenated.
 """
 
-from typing import Dict, Any, Optional, List
-from ..core import RAGTechnique, TechniqueResult
+from typing import Dict, Optional
+
 from ..adapters.base import LLMAdapter
+from ..core import RAGTechnique, TechniqueResult
 
 
 class FusionInDecoderPipeline:
@@ -25,7 +26,7 @@ class FusionInDecoderPipeline:
         mode: Processing mode - "separate" (per-document) or "concat" (all at once)
         generator_kwargs: Optional kwargs passed to generator
     """
-    
+
     def __init__(
         self,
         retriever: RAGTechnique,
@@ -41,12 +42,14 @@ class FusionInDecoderPipeline:
         self.top_k = top_k
         self.mode = mode
         self.generator_kwargs = generator_kwargs or {}
-        
-        # If no generator provided, create a fallback LLMGenerator
+
+        # Require either generator or llm_adapter to be provided
         if not self.generator and not self.llm_adapter:
-            from ..techniques.llm_generator import LLMGenerator
-            self.generator = LLMGenerator()
-    
+            raise ValueError(
+                "FusionInDecoderPipeline requires either a 'generator' technique "
+                "or an 'llm_adapter' to be provided"
+            )
+
     def run(self, query: str, *, top_k: Optional[int] = None, **kwargs) -> TechniqueResult:
         """Run the FiD pipeline.
         
@@ -61,16 +64,16 @@ class FusionInDecoderPipeline:
         # Step 1: Retrieve documents
         retrieval_top_k = top_k or self.top_k
         retrieval_result = self.retriever.apply(query=query, top_k=retrieval_top_k, **kwargs)
-        
+
         if not retrieval_result.success or "hits" not in retrieval_result.payload:
             return TechniqueResult(
                 success=False,
                 payload={"error": "Retrieval failed or returned no hits"},
                 meta={"method": "fid", "mode": self.mode}
             )
-        
+
         hits = retrieval_result.payload["hits"]
-        
+
         if not hits:
             return TechniqueResult(
                 success=True,
@@ -81,7 +84,7 @@ class FusionInDecoderPipeline:
                 },
                 meta={"method": "fid", "mode": self.mode}
             )
-        
+
         # Step 2: Extract contexts from hits
         contexts = []
         for hit in hits:
@@ -94,10 +97,10 @@ class FusionInDecoderPipeline:
             else:
                 context = str(hit)  # Fallback to string representation
             contexts.append(context)
-        
+
         # Step 3: Generate responses based on mode
         component_outputs = []
-        
+
         if self.mode == "separate":
             # Process each context separately
             for i, context in enumerate(contexts):
@@ -108,31 +111,31 @@ class FusionInDecoderPipeline:
                     "prompt": prompt,
                     "output": output
                 })
-            
+
             # Aggregate outputs
             aggregated_parts = [comp["output"] for comp in component_outputs]
             final_answer = "\n\n---\n\n".join(aggregated_parts)
-            
+
         elif self.mode == "concat":
             # Concatenate all contexts
             all_contexts = "\n\n".join([f"Context {i+1}: {ctx}" for i, ctx in enumerate(contexts)])
             prompt = f"Query: {query}\n\n{all_contexts}\n\nAnswer:"
             output = self._generate_single(prompt)
-            
+
             component_outputs.append({
                 "contexts_count": len(contexts),
                 "prompt": prompt,
                 "output": output
             })
             final_answer = output
-            
+
         else:
             return TechniqueResult(
                 success=False,
                 payload={"error": f"Unknown mode: {self.mode}"},
                 meta={"method": "fid", "mode": self.mode}
             )
-        
+
         return TechniqueResult(
             success=True,
             payload={
@@ -142,7 +145,7 @@ class FusionInDecoderPipeline:
             },
             meta={"method": "fid", "mode": self.mode, "contexts_processed": len(contexts)}
         )
-    
+
     def _generate_single(self, prompt: str) -> str:
         """Generate text for a single prompt using available generator or adapter."""
         if self.generator:
@@ -151,13 +154,13 @@ class FusionInDecoderPipeline:
                 return result.payload["text"]
             else:
                 return f"GENERATION_ERROR: {result.payload}"
-        
+
         elif self.llm_adapter:
             try:
                 return self.llm_adapter.generate(prompt, **self.generator_kwargs)
             except Exception as e:
                 return f"ADAPTER_ERROR: {str(e)}"
-        
+
         else:
             # Fallback behavior (shouldn't reach here due to constructor logic)
             return f"FALLBACK: {prompt}"

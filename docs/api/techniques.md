@@ -8,11 +8,12 @@ This page provides detailed API documentation for all RAGLib techniques organize
 |-----------|----------|---------|----------------|
 | FixedSizeChunker | Chunking | Split into fixed-size chunks | `chunk_size`, `overlap` |
 | SemanticChunker | Chunking | Semantically-aware chunking | `similarity_threshold` |
+| SentenceWindowChunker | Chunking | Sentence-based windowing | `window_size`, `step_size` |
 | DenseRetriever | Retrieval | Embedding-based retrieval | `top_k`, `similarity_threshold` |
-| BM25SimpleRetriever | Retrieval | Keyword-based retrieval | `top_k`, `k1`, `b` |
-| CrossEncoderRerank | Reranking | Neural reranking | `model_name`, `top_k` |
-| MMR | Reranking | Diversity-aware reranking | `diversity_lambda` |
-| LLMGenerator | Generation | LLM-based generation | `model_name`, `temperature` |
+| BM25 | Retrieval | Keyword-based retrieval | `top_k`, `k1`, `b` |
+| CrossEncoderReRanker | Reranking | Neural reranking | `model_name`, `top_k` |
+| MMRReRanker | Reranking | Diversity-aware reranking | `diversity_lambda` |
+| HyDE | Generation | Hypothetical document embeddings | `model_name`, `temperature` |
 
 ## Usage Patterns 🚀
 
@@ -83,15 +84,14 @@ Break documents into processable segments:
 Find relevant information from document collections:
 
 - **DenseRetriever**: Vector-based semantic retrieval using embeddings
-- **BM25SimpleRetriever**: Traditional keyword-based sparse retrieval
-- **BM25ProductionRetriever**: Enhanced BM25 with production features
+- **BM25**: Traditional keyword-based sparse retrieval with in-memory indexing
 
 ### Reranking Techniques 🎯
 
 Improve initial retrieval results:
 
-- **CrossEncoderRerank**: Deep learning-based relevance scoring
-- **MMR**: Balance relevance with diversity using Maximal Marginal Relevance
+- **CrossEncoderReRanker**: Deep learning-based relevance scoring
+- **MMRReRanker**: Balance relevance with diversity using Maximal Marginal Relevance
 
 ### Generation Techniques ✍️
 

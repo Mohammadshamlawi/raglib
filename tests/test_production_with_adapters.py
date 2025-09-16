@@ -1,7 +1,8 @@
 from raglib.adapters.dummy_embedder import DummyEmbedder
 from raglib.adapters.inmemory_vectorstore import InMemoryVectorStore
-from raglib.techniques.dense_retriever import DenseRetriever
 from raglib.schemas import Chunk
+from raglib.techniques.dense_retriever import DenseRetriever
+
 
 def test_dense_retriever_with_provided_adapters_matches_default_behaviour():
     chunks = [

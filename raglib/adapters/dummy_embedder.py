@@ -1,9 +1,10 @@
 """DummyEmbedder: deterministic, sha256-based embeddings for testing."""
 
-from typing import Sequence, List
 import hashlib
 import math
 import re
+from collections.abc import Sequence
+from typing import List
 
 from .base import EmbedderAdapter
 

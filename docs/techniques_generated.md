@@ -2,23 +2,10 @@
 
 ---
 
-**Total Techniques:** 13
-**Categories:** 6
+**Total Techniques:** 8
+**Categories:** 5
 
 ### Chunking
-
-#### demo_fixed_chunker
-
-**Simple fixed-size character chunker for demos and tests.**
-
-| Property | Value |
-|----------|-------|
-| Version | `1.0.0` |
-| Class | `DemoFixedChunker` |
-| Module | `raglib.techniques.demo_fixed_chunker` |
-| Dependencies | None |
-
----
 
 #### fixed_size_chunker
 
@@ -61,7 +48,7 @@
 
 ### Reranking
 
-#### crossencoder_reranker
+#### crossencoder_rerank
 
 **Cross-encoder re-ranking using pairwise (query, document) scoring**
 
@@ -74,7 +61,7 @@
 
 ---
 
-#### mmr_reranker
+#### mmr
 
 **Maximal Marginal Relevance re-ranking for balancing relevance and diversity**
 
@@ -87,48 +74,7 @@
 
 ---
 
-### Generation
-
-#### llm_generator
-
-**LLM text generation with deterministic fallback**
-
-| Property | Value |
-|----------|-------|
-| Version | `1.0.0` |
-| Class | `LLMGenerator` |
-| Module | `raglib.techniques.llm_generator` |
-| Dependencies | None |
-
----
-
-### Core-Retrieval
-
-#### bm25_retriever
-
-**Production-friendly BM25 retriever (wrapper over BM25Simple).**
-
-| Property | Value |
-|----------|-------|
-| Version | `1.0.0` |
-| Class | `BM25Retriever` |
-| Module | `raglib.techniques.bm25_production` |
-| Dependencies | None |
-
----
-
-#### bm25_simple
-
-**Toy BM25 retriever (pure python, dependency-free).**
-
-| Property | Value |
-|----------|-------|
-| Version | `1.0.0` |
-| Class | `BM25Simple` |
-| Module | `raglib.techniques.bm25_simple` |
-| Dependencies | None |
-
----
+### Core Retrieval
 
 #### dense_retriever
 
@@ -143,22 +89,9 @@
 
 ---
 
-#### inmemory_dense
-
-**In-memory dense retriever using adapters for embedder and vectorstore.**
-
-| Property | Value |
-|----------|-------|
-| Version | `1.0.0` |
-| Class | `InMemoryDenseRetriever` |
-| Module | `raglib.techniques.dummy_dense` |
-| Dependencies | None |
-
----
-
 ### Retrieval Enhancement
 
-#### hyde_generator
+#### hyde
 
 **Generate hypothetical documents to improve retrieval**
 
@@ -171,17 +104,17 @@
 
 ---
 
-### Utility
+### Sparse Retrieval
 
-#### echo_technique
+#### bm25
 
-**Echoes the input payload back as TechniqueResult.**
+**BM25 ranking function for text retrieval with in-memory indexing**
 
 | Property | Value |
 |----------|-------|
 | Version | `1.0.0` |
-| Class | `EchoTechnique` |
-| Module | `raglib.techniques.echo_technique` |
+| Class | `BM25` |
+| Module | `raglib.techniques.bm25` |
 | Dependencies | None |
 
 ---

@@ -99,35 +99,41 @@ def process_query(documents, query):
         # Step 1: Chunking
         ChunkerClass = TechniqueRegistry.get("fixed_size_chunker")
         chunker = ChunkerClass(chunk_size=200, overlap=50)
-        
-        chunks_result = chunker.apply(documents)
-        if not chunks_result.success:
-            return {
-                "success": False,
-                "error": f"Chunking failed: {chunks_result.error}"
-            }
-        
-        chunks = chunks_result.payload["chunks"]
+
+        # Process each document individually
+        all_chunks = []
+        for doc in documents:
+            chunks_result = chunker.apply(doc)
+            if not chunks_result.success:
+                return {
+                    "success": False,
+                    "error": f"Chunking failed: {chunks_result.error}"
+                }
+            all_chunks.extend(chunks_result.payload["chunks"])
+
+        chunks = all_chunks
         print(f"  📝 Chunked into {len(chunks)} pieces")
         
         # Step 2: Dense retrieval
-        embedder = DummyEmbedder(dimension=384)
+        embedder = DummyEmbedder(dim=384)
         vectorstore = InMemoryVectorStore()
         
         RetrieverClass = TechniqueRegistry.get("dense_retriever")
         retriever = RetrieverClass(embedder=embedder, vectorstore=vectorstore)
         
         # Index chunks
-        index_result = retriever.apply(chunks, mode="index")
+        # Index the chunks
+        index_result = retriever.apply(chunks)
         if not index_result.success:
             return {"success": False, "error": f"Indexing failed: {index_result.error}"}
-        
+
         # Retrieve relevant chunks
-        retrieve_result = retriever.apply(query, mode="retrieve", top_k=5)
+        retrieve_result = retriever.apply(query=query, top_k=5)
         if not retrieve_result.success:
             return {"success": False, "error": f"Retrieval failed: {retrieve_result.error}"}
-        
-        relevant_chunks = retrieve_result.payload["chunks"]
+
+        hits = retrieve_result.payload["hits"]
+        relevant_chunks = [hit.chunk for hit in hits if hit.chunk]
         print(f"  🔍 Retrieved {len(relevant_chunks)} relevant chunks")
         
         # Step 3: Reranking with MMR (if available)
@@ -181,7 +187,7 @@ def process_query(documents, query):
             "retrieved_count": len(relevant_chunks),
             "reranked_count": len(reranked_chunks),
             "answer": answer,
-            "context": reranked_chunks
+            "context": [chunk.text if hasattr(chunk, 'text') else str(chunk) for chunk in reranked_chunks]
         }
         
     except Exception as e:
@@ -198,16 +204,17 @@ def create_fallback_answer(query, context_chunks):
     max_overlap = 0
     
     for chunk in context_chunks:
-        chunk_lower = chunk.lower()
+        chunk_text = chunk.text if hasattr(chunk, 'text') else str(chunk)
+        chunk_lower = chunk_text.lower()
         # Count word overlaps
         query_words = set(query_lower.split())
         chunk_words = set(chunk_lower.split())
         overlap = len(query_words & chunk_words)
-        
+
         if overlap > max_overlap:
             max_overlap = overlap
-            best_chunk = chunk
-    
+            best_chunk = chunk_text
+
     if best_chunk:
         # Simple extractive answer
         sentences = best_chunk.split('.')

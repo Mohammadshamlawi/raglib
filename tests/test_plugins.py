@@ -114,11 +114,11 @@ class TestLocalTechnique(RAGTechnique):
         class MockEntryPointsDict(dict):
             def __init__(self, *args, **kwargs):
                 super().__init__(*args, **kwargs)
-                
+
         mock_entry_points_dict = MockEntryPointsDict({'raglib.plugins': [mock_ep]})
         mock_entry_points_obj = Mock()
         mock_entry_points_obj.select.side_effect = AttributeError()  # No select method
-        
+
         # Assign the get method to the dict-like object
         mock_entry_points_dict.get = mock_entry_points_obj.get
         mock_entry_points_dict.get.return_value = [mock_ep]

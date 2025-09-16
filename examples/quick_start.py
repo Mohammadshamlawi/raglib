@@ -53,17 +53,20 @@ def main():
     
     # Step 2: Chunk documents
     try:
-        chunks_result = chunker.apply(documents)
-        if not chunks_result.success:
-            print(f"❌ Chunking failed: {chunks_result.error}")
-            return 1
+        all_chunks = []
+        for i, doc in enumerate(documents):
+            chunks_result = chunker.apply(doc)
+            if not chunks_result.success:
+                print(f"❌ Chunking failed for document {i}: {chunks_result.error}")
+                return 1
+            all_chunks.extend(chunks_result.payload["chunks"])
         
-        chunks = chunks_result.payload["chunks"]
+        chunks = all_chunks
         print(f"📝 Created {len(chunks)} chunks")
         
         # Show first few chunks
         for i, chunk in enumerate(chunks[:3]):
-            print(f"   Chunk {i+1}: {chunk[:60]}...")
+            print(f"   Chunk {i+1}: {chunk.text[:60]}...")
     
     except Exception as e:
         print(f"❌ Chunking failed: {e}")
@@ -72,7 +75,7 @@ def main():
     # Step 3: Initialize retriever with fallback adapters
     try:
         RetrieverClass = TechniqueRegistry.get("dense_retriever")
-        embedder = DummyEmbedder(dimension=384)
+        embedder = DummyEmbedder(dim=384)
         vectorstore = InMemoryVectorStore()
         retriever = RetrieverClass(embedder=embedder, vectorstore=vectorstore)
         print("✅ Dense retriever initialized with fallback adapters")
@@ -82,35 +85,34 @@ def main():
     
     # Step 4: Index chunks
     try:
-        index_result = retriever.apply(chunks, mode="index")
+        index_result = retriever.apply(chunks)
         if not index_result.success:
             print(f"❌ Indexing failed: {index_result.error}")
             return 1
-        
-        indexed_count = index_result.payload.get("indexed_count", len(chunks))
+
+        indexed_count = index_result.payload.get("added", len(chunks))
         print(f"🔍 Indexed {indexed_count} chunks")
-    
+
     except Exception as e:
         print(f"❌ Indexing failed: {e}")
-        return 1
-    
-    # Step 5: Perform retrieval
+        return 1    # Step 5: Perform retrieval
     query = "How do you compose different techniques in RAGLib?"
     print(f"\n❓ Query: {query}")
-    
+
     try:
-        retrieve_result = retriever.apply(query, mode="retrieve", top_k=3)
+        retrieve_result = retriever.apply(query=query, top_k=3)
         if not retrieve_result.success:
             print(f"❌ Retrieval failed: {retrieve_result.error}")
             return 1
-        
-        relevant_chunks = retrieve_result.payload["chunks"]
-        scores = retrieve_result.payload.get("scores", [1.0] * len(relevant_chunks))
-        
-        print(f"📋 Retrieved {len(relevant_chunks)} relevant chunks:")
-        for i, (chunk, score) in enumerate(zip(relevant_chunks, scores)):
-            print(f"   {i+1}. (Score: {score:.3f}) {chunk}")
-    
+
+        hits = retrieve_result.payload["hits"]
+        print(f"📋 Retrieved {len(hits)} relevant chunks:")
+        for i, hit in enumerate(hits):
+            if hit.chunk:
+                print(f"   {i+1}. (Score: {hit.score:.3f}) {hit.chunk.text}")
+            else:
+                print(f"   {i+1}. (Score: {hit.score:.3f}) [No chunk content]")
+
     except Exception as e:
         print(f"❌ Retrieval failed: {e}")
         return 1
@@ -120,8 +122,11 @@ def main():
         GeneratorClass = TechniqueRegistry.get("llm_generator")
         generator = GeneratorClass()
         print("\n✅ Generator initialized")
-        
-        generate_result = generator.apply(query=query, context=relevant_chunks)
+
+        # Extract chunk texts for generation context
+        context_chunks = [hit.chunk.text for hit in hits if hit.chunk]
+
+        generate_result = generator.apply(query=query, context=context_chunks)
         if generate_result.success:
             answer = generate_result.payload.get("answer", "No answer generated")
             print(f"💡 Generated Answer: {answer}")
@@ -130,13 +135,13 @@ def main():
             print("💡 Fallback Answer: Based on the retrieved context, you can "
                   "compose different techniques in RAGLib by using the unified "
                   "apply() method interface.")
-    
+
     except Exception as e:
         print(f"⚠️  Generator not available: {e}")
         print("💡 Fallback Answer: Based on the retrieved context, you can "
               "compose different techniques in RAGLib by using the unified "
               "apply() method interface.")
-    
+
     print("\n🎉 Quick start completed successfully!")
     print("\n📖 Next Steps:")
     print("   - Try 'raglib-cli run-example e2e_toy' for a complete pipeline")

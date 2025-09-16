@@ -188,7 +188,7 @@ def main():
     else:
         # Test a subset of reliable techniques for demo
         techniques_to_test = [
-            t for t in ["echo_technique", "bm25_simple", "dummy_dense"] 
+            t for t in ["bm25", "dense_retriever"] 
             if t in available_techniques
         ]
     

@@ -1,4 +1,6 @@
-from typing import Any, Dict, Iterable, Optional, Sequence
+from collections.abc import Sequence
+from typing import Any, Dict, Optional
+
 from .core import TechniqueResult
 
 

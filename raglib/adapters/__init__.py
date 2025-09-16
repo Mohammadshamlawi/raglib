@@ -6,6 +6,6 @@ __all__ = [
     "dummy_embedder",
 ]
 
-from .base import EmbedderAdapter, VectorStoreAdapter, LLMAdapter  # noqa: F401
-from .inmemory_vectorstore import InMemoryVectorStore  # noqa: F401
+from .base import EmbedderAdapter, LLMAdapter, VectorStoreAdapter  # noqa: F401
 from .dummy_embedder import DummyEmbedder  # noqa: F401
+from .inmemory_vectorstore import InMemoryVectorStore  # noqa: F401

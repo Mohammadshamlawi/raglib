@@ -6,8 +6,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Union
 
-from .loaders import QAItem, load_qa_dataset
 from ..schemas import Document
+from .loaders import QAItem, load_qa_dataset
 
 
 class BenchmarkHarness:

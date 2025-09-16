@@ -3,9 +3,10 @@
 Generates hypothetical answers to improve retrieval through pseudo-document generation.
 """
 
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
+
+from ..adapters.base import EmbedderAdapter, LLMAdapter
 from ..core import RAGTechnique, TechniqueMeta, TechniqueResult
-from ..adapters.base import LLMAdapter, EmbedderAdapter
 from ..registry import TechniqueRegistry
 
 
@@ -32,14 +33,14 @@ class HyDE(RAGTechnique):
         hyde = HyDE()  # Uses deterministic fallback
         result = hyde.apply(query="What is ML?", return_embeddings=True)
     """
-    
+
     meta = TechniqueMeta(
-        name="hyde_generator", 
+        name="hyde",
         category="retrieval_enhancement",
         description="Generate hypothetical documents to improve retrieval",
         tags={"type": "hypothesis_generation", "fallback": "deterministic"}
     )
-    
+
     def __init__(
         self,
         llm_adapter: Optional[LLMAdapter] = None,
@@ -48,12 +49,12 @@ class HyDE(RAGTechnique):
         fallback_hypothesis_template: str = "Hypothesis for '{query}': {short_query}"
     ):
         super().__init__(self.meta)
-        
+
         self.llm_adapter = llm_adapter
         self.embedder = embedder
         self.generation_kwargs = generation_kwargs or {}
         self.fallback_hypothesis_template = fallback_hypothesis_template
-    
+
     def apply(self, *args, **kwargs) -> TechniqueResult:
         """Apply HyDE hypothesis generation.
         
@@ -68,14 +69,14 @@ class HyDE(RAGTechnique):
         # Extract arguments
         query = kwargs.get('query') or (args[0] if args else None)
         return_embeddings = kwargs.get('return_embeddings', False)
-        
+
         if query is None:
             return TechniqueResult(
                 success=False,
                 payload={"error": "Must provide 'query' argument"},
                 meta={"method": "hyde"}
             )
-        
+
         # Generate hypothesis
         if self.llm_adapter:
             try:
@@ -91,11 +92,11 @@ class HyDE(RAGTechnique):
             # Deterministic fallback behavior
             hypothesis = self._generate_fallback_hypothesis(query)
             generator_method = "fallback"
-        
+
         # Prepare result payload
         payload = {"hypothesis": hypothesis}
         meta_info = {"method": "hyde", "generator": generator_method}
-        
+
         # Generate embeddings if requested
         if return_embeddings:
             if self.embedder:
@@ -111,13 +112,13 @@ class HyDE(RAGTechnique):
                 # Deterministic fallback embedding
                 payload["embedding"] = self._generate_fallback_embedding(hypothesis)
                 meta_info["embedder"] = "fallback"
-        
+
         return TechniqueResult(
             success=True,
             payload=payload,
             meta=meta_info
         )
-    
+
     def _create_hypothesis_prompt(self, query: str) -> str:
         """Create a prompt for hypothesis generation."""
         return (
@@ -126,7 +127,7 @@ class HyDE(RAGTechnique):
             f"Focus on providing factual information that would be found in a relevant document.\n\n"
             f"Answer:"
         )
-    
+
     def _generate_fallback_hypothesis(self, query: str) -> str:
         """Generate deterministic fallback hypothesis."""
         short_query = query[:50] + "..." if len(query) > 50 else query
@@ -134,27 +135,27 @@ class HyDE(RAGTechnique):
             query=query,
             short_query=short_query
         )
-    
+
     def _generate_fallback_embedding(self, text: str) -> list:
         """Generate deterministic fallback embedding."""
         # Simple deterministic embedding based on text characteristics
         text_lower = text.lower()
         embedding = []
-        
+
         # Use text length and character frequencies for deterministic values
         embedding.append(len(text) / 1000.0)  # Normalize length
         embedding.append(text_lower.count('a') / max(len(text), 1))
         embedding.append(text_lower.count('e') / max(len(text), 1))
         embedding.append(text_lower.count('i') / max(len(text), 1))
         embedding.append(text_lower.count(' ') / max(len(text), 1))
-        
+
         # Pad to a fixed dimension (e.g., 384 dimensions)
         while len(embedding) < 384:
             # Use position-based deterministic values
             pos = len(embedding)
             char_code = ord(text_lower[pos % len(text_lower)]) if text_lower else 97
             embedding.append((char_code % 256) / 256.0)
-        
+
         return embedding[:384]  # Ensure exactly 384 dimensions
 
 

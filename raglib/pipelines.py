@@ -1,6 +1,8 @@
-from typing import Any, Sequence, Dict, Optional
+from collections.abc import Sequence
+from typing import Any
+
 from .core import RAGTechnique, TechniqueResult
-from .utils import normalize_result, merge_meta
+from .utils import merge_meta
 
 
 class Pipeline:

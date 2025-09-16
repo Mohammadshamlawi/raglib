@@ -388,13 +388,13 @@ class DenseRetriever(RAGTechnique):
 - `index`: Index documents for later retrieval
 - `retrieve`: Retrieve relevant documents for a query
 
-#### BM25Retriever
+#### BM25
 
-Retrieves documents using BM25 sparse retrieval.
+BM25 retrieval technique with in-memory indexing.
 
 ```python
 @TechniqueRegistry.register
-class BM25SimpleRetriever(RAGTechnique):
+class BM25(RAGTechnique):
     def __init__(self, k1: float = 1.2, b: float = 0.75):
         pass
 ```
@@ -405,13 +405,13 @@ class BM25SimpleRetriever(RAGTechnique):
 
 ### Reranking Techniques
 
-#### CrossEncoderRerank
+#### CrossEncoderReRanker
 
 Reranks candidates using a cross-encoder model.
 
 ```python
 @TechniqueRegistry.register
-class CrossEncoderRerank(RAGTechnique):
+class CrossEncoderReRanker(RAGTechnique):
     def __init__(self, model: str = "cross-encoder/ms-marco-TinyBERT-L-2-v2"):
         pass
     

@@ -84,7 +84,7 @@ from raglib.pipelines import Pipeline
 pipeline_config = [
     ("chunker", "semantic_chunker", {"similarity_threshold": 0.8}),
     ("retriever", "dense_retriever", {"top_k": 5}),
-    ("reranker", "mmr_reranker", {"lambda_param": 0.7}),
+    ("reranker", "mmr", {"lambda_param": 0.7}),
     ("generator", "llm_generator", {"temperature": 0.7})
 ]
 
@@ -185,7 +185,7 @@ RAGLib provides production-ready implementations across all RAG components:
 
 ### 💬 Response Generation
 - **LLM Generation**: Flexible text generation with adapter support
-- **HyDE**: Hypothetical Document Embeddings for improved retrieval
+- **HyDE**: Query expansion using hypothetical document generation
 - **Template Generation**: Structured response formatting
 
 ### 🔧 System Components
@@ -229,7 +229,7 @@ result = retriever.apply(query="search query", corpus=documents)
 from raglib.benchmark import BenchmarkHarness
 
 # Evaluate any technique
-retriever = TechniqueRegistry.get("bm25_simple")()
+retriever = TechniqueRegistry.get("bm25")()
 
 harness = BenchmarkHarness()
 results = harness.run_benchmark(

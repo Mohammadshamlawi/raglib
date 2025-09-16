@@ -10,20 +10,22 @@ This class tries to be "production-ready" while preserving the abstract apply() 
 
 Return: TechniqueResult with payload {"hits": List[Hit]}
 """
-from typing import Any, List, Optional, Sequence
-from ..core import RAGTechnique, TechniqueMeta, TechniqueResult
-from ..schemas import Chunk, Hit
-from ..registry import TechniqueRegistry
+from collections.abc import Sequence
+from typing import Any, List, Optional
+
+from ..adapters.base import EmbedderAdapter, VectorStoreAdapter
 from ..adapters.dummy_embedder import DummyEmbedder
 from ..adapters.inmemory_vectorstore import InMemoryVectorStore
-from ..adapters.base import EmbedderAdapter, VectorStoreAdapter
+from ..core import RAGTechnique, TechniqueMeta, TechniqueResult
+from ..registry import TechniqueRegistry
+from ..schemas import Chunk, Hit
 
 
 @TechniqueRegistry.register
 class DenseRetriever(RAGTechnique):
     meta = TechniqueMeta(
         name="dense_retriever",
-        category="core-retrieval",
+        category="core_retrieval",
         description="Production-friendly dense retriever with optional adapters fallback."
     )
 
