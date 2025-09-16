@@ -17,7 +17,7 @@ class SentenceWindowChunker(RAGTechnique):
     """
 
     meta = TechniqueMeta(
-        name="Sentence Window Retrieval",
+        name="sentence_window_chunker",
         category="chunking",
         description="Sentence-based windowing with configurable window size and overlap"
     )

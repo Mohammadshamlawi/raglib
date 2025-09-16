@@ -2,29 +2,61 @@
   {
     "query": "What is machine learning?",
     "result": {
-      "success": false,
-      "error": "'fixed_size_chunker'"
+      "success": true,
+      "chunks_count": 7,
+      "retrieved_count": 5,
+      "reranked_count": 3,
+      "answer": "Reinforcement learning is a type of machine learning where agents learn to make decisions by receiving rewards or penalties for their actions.",
+      "context": [
+        "Reinforcement learning is a type of machine learning where agents learn to make decisions by receiving rewards or penalties for their actions.",
+        "Machine learning is a subset of artificial intelligence that enables computers to learn and make decisions without being explicitly programmed.",
+        "Computer vision enables machines to identify and analyze visual content such as images and videos using deep learning algorithms."
+      ]
     }
   },
   {
     "query": "How does deep learning work?",
     "result": {
-      "success": false,
-      "error": "'fixed_size_chunker'"
+      "success": true,
+      "chunks_count": 7,
+      "retrieved_count": 5,
+      "reranked_count": 3,
+      "answer": "Deep learning uses neural networks with multiple layers to process complex patterns in data, mimicking how the human brain works.",
+      "context": [
+        "Deep learning uses neural networks with multiple layers to process complex patterns in data, mimicking how the human brain works.",
+        "Reinforcement learning is a type of machine learning where agents learn to make decisions by receiving rewards or penalties for their actions.",
+        "Machine learning is a subset of artificial intelligence that enables computers to learn and make decisions without being explicitly programmed."
+      ]
     }
   },
   {
     "query": "What is RAG and how is it useful?",
     "result": {
-      "success": false,
-      "error": "'fixed_size_chunker'"
+      "success": true,
+      "chunks_count": 7,
+      "retrieved_count": 5,
+      "reranked_count": 3,
+      "answer": "Machine learning is a subset of artificial intelligence that enables computers to learn and make decisions without being explicitly programmed.",
+      "context": [
+        "Machine learning is a subset of artificial intelligence that enables computers to learn and make decisions without being explicitly programmed.",
+        "Reinforcement learning is a type of machine learning where agents learn to make decisions by receiving rewards or penalties for their actions.",
+        "Large language models like GPT are trained on vast amounts of text data to understand and generate human-like text responses."
+      ]
     }
   },
   {
     "query": "Tell me about computer vision",
     "result": {
-      "success": false,
-      "error": "'fixed_size_chunker'"
+      "success": true,
+      "chunks_count": 7,
+      "retrieved_count": 5,
+      "reranked_count": 3,
+      "answer": "Computer vision enables machines to identify and analyze visual content such as images and videos using deep learning algorithms.",
+      "context": [
+        "Machine learning is a subset of artificial intelligence that enables computers to learn and make decisions without being explicitly programmed.",
+        "Computer vision enables machines to identify and analyze visual content such as images and videos using deep learning algorithms.",
+        "Reinforcement learning is a type of machine learning where agents learn to make decisions by receiving rewards or penalties for their actions."
+      ]
     }
   }
 ]

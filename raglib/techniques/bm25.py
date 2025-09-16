@@ -1,4 +1,8 @@
-"""BM25 (Best Matching 25) retrieval technique.
+"""BM25 (Best Matching 25) retrieval tech    meta = TechniqueMeta(
+        name="bm25",
+        category="sparse_retrieval",
+        description="BM25 ranking function for text retrieval with in-memory indexing"
+    ).
 
 A robust BM25 implementation for text retrieval. Provides both lightweight
 in-memory indexing and runtime corpus support. Uses simple tokenization
@@ -40,8 +44,8 @@ class BM25(RAGTechnique):
     """
     
     meta = TechniqueMeta(
-        name="BM25 (Best Matching 25)",
-        category="sparse-retrieval",
+        name="bm25",
+        category="sparse_retrieval",
         description="BM25 ranking function for text retrieval with in-memory indexing"
     )
     

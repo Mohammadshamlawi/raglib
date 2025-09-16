@@ -132,7 +132,7 @@ To add a new technique to RAGLib:
 
 ### Reranking Techniques
 
-#### CrossEncoderRerank
+#### CrossEncoderReRanker
 - **Description**: Rerank documents using a cross-encoder model
 - **Category**: reranking
 - **Dependencies**: transformers, torch
@@ -284,9 +284,9 @@ Reranking techniques improve the quality of retrieved results.
 ### Usage Example
 
 ```python
-from raglib.techniques import CrossEncoderRerank
+from raglib.techniques import CrossEncoderReRanker
 
-reranker = CrossEncoderRerank(model="cross-encoder/ms-marco-TinyBERT-L-2-v2")
+reranker = CrossEncoderReRanker(model="cross-encoder/ms-marco-TinyBERT-L-2-v2")
 
 query = "search query"
 candidates = ["candidate1", "candidate2", "candidate3"]

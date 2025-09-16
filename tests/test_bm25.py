@@ -1,4 +1,4 @@
-"""Tests for BM25 (Best Matching 25) retrieval technique."""
+"""Tests for BM25 retrieval technique."""
 
 from raglib.schemas import Document
 from raglib.techniques.bm25 import BM25

@@ -19,7 +19,7 @@ class SemanticChunker(RAGTechnique):
     """
 
     meta = TechniqueMeta(
-        name="Semantic Chunking",
+        name="semantic_chunker",
         category="chunking",
         description="Semantic similarity-based chunking with configurable embedder"
     )

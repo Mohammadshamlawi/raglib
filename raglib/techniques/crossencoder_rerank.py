@@ -81,7 +81,7 @@ class CrossEncoderReRanker(RAGTechnique):
     """
 
     meta = TechniqueMeta(
-        name="Cross-Encoder Re-Ranking",
+        name="crossencoder_rerank",
         category="reranking",
         description="Cross-encoder re-ranking using pairwise (query, document) scoring"
     )

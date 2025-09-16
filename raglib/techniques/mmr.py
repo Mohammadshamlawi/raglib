@@ -43,7 +43,7 @@ class MMRReRanker(RAGTechnique):
     """
 
     meta = TechniqueMeta(
-        name="Maximal Marginal Relevance (MMR)",
+        name="mmr",
         category="reranking",
         description="Maximal Marginal Relevance re-ranking for balancing relevance and diversity"
     )

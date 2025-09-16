@@ -7,7 +7,7 @@
 
 ### Chunking
 
-#### Fixed-Size Chunking
+#### fixed_size_chunker
 
 **Fixed-size text chunking with overlap support**
 
@@ -20,7 +20,7 @@
 
 ---
 
-#### Semantic Chunking
+#### semantic_chunker
 
 **Semantic similarity-based chunking with configurable embedder**
 
@@ -33,7 +33,7 @@
 
 ---
 
-#### Sentence Window Retrieval
+#### sentence_window_chunker
 
 **Sentence-based windowing with configurable window size and overlap**
 
@@ -48,7 +48,7 @@
 
 ### Reranking
 
-#### Cross-Encoder Re-Ranking
+#### crossencoder_rerank
 
 **Cross-encoder re-ranking using pairwise (query, document) scoring**
 
@@ -61,7 +61,7 @@
 
 ---
 
-#### Maximal Marginal Relevance (MMR)
+#### mmr
 
 **Maximal Marginal Relevance re-ranking for balancing relevance and diversity**
 
@@ -74,9 +74,9 @@
 
 ---
 
-### Core-Retrieval
+### Core Retrieval
 
-#### Dense Retrieval / Vector Search (e.g., DPR)
+#### dense_retriever
 
 **Production-friendly dense retriever with optional adapters fallback.**
 
@@ -91,7 +91,7 @@
 
 ### Retrieval Enhancement
 
-#### Hypothetical Document Embeddings (HyDE)
+#### hyde
 
 **Generate hypothetical documents to improve retrieval**
 
@@ -104,9 +104,9 @@
 
 ---
 
-### Sparse-Retrieval
+### Sparse Retrieval
 
-#### BM25 (Best Matching 25)
+#### bm25
 
 **BM25 ranking function for text retrieval with in-memory indexing**
 

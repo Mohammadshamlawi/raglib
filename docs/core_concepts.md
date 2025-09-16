@@ -130,13 +130,13 @@ semantic_chunker = SemanticChunker(similarity_threshold=0.8)
 
 **Examples**:
 ```python
-from raglib.techniques import DenseRetriever, BM25Retriever
+from raglib.techniques import DenseRetriever, BM25
 
 # Dense retrieval using embeddings
 dense = DenseRetriever(top_k=10, similarity_threshold=0.7)
 
 # Sparse retrieval using BM25
-sparse = BM25Retriever(top_k=10)
+sparse = BM25(top_k=10)
 ```
 
 ### Reranking Techniques
@@ -150,10 +150,10 @@ sparse = BM25Retriever(top_k=10)
 
 **Examples**:
 ```python
-from raglib.techniques import CrossEncoderRerank, MMRRerank
+from raglib.techniques import CrossEncoderReRanker, MMRReRanker
 
 # Cross-encoder reranking
-reranker = CrossEncoderRerank(model_name="cross-encoder/ms-marco-TinyBERT-L-2")
+reranker = CrossEncoderReRanker(model_name="cross-encoder/ms-marco-TinyBERT-L-2")
 
 # Maximal Marginal Relevance
 mmr = MMRRerank(diversity_lambda=0.3)
