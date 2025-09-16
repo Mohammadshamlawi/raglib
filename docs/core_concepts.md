@@ -170,12 +170,12 @@ mmr = MMRRerank(diversity_lambda=0.3)
 
 **Examples**:
 ```python
-from raglib.techniques import LLMGenerator
+from raglib.techniques import HyDE
 
-generator = LLMGenerator(
-    model_name="gpt-3.5-turbo",
-    temperature=0.7,
-    max_tokens=150
+# HyDE for query expansion and improved retrieval
+hyde = HyDE(
+    llm_adapter=custom_llm,  # Your LLM adapter
+    temperature=0.7
 )
 ```
 

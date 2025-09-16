@@ -309,9 +309,10 @@ Generation techniques produce final answers using retrieved context.
 ### Usage Example
 
 ```python
-from raglib.techniques import LLMGenerator
+from raglib.techniques import HyDE
 
-generator = LLMGenerator(model="gpt-3.5-turbo", temperature=0.1)
+# HyDE for query expansion
+hyde = HyDE(llm_adapter=llm_adapter, temperature=0.1)
 
 query = "What is RAG?"
 context = ["RAG stands for Retrieval-Augmented Generation..."]

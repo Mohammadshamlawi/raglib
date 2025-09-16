@@ -42,7 +42,7 @@ Let's build a simple RAG pipeline:
 from raglib.techniques import (
     FixedSizeChunker,
     DenseRetriever,
-    LLMGenerator
+    HyDE
 )
 from raglib.adapters import (
     InMemoryVectorStore,
@@ -51,10 +51,10 @@ from raglib.adapters import (
 
 # Initialize components
 chunker = FixedSizeChunker(chunk_size=512, overlap=50)
-embedder = DummyEmbedder(dimension=384)  # Fallback embedder
+embedder = DummyEmbedder(dim=384)  # Fallback embedder
 vectorstore = InMemoryVectorStore()
 retriever = DenseRetriever(embedder=embedder, vectorstore=vectorstore)
-generator = LLMGenerator()  # Uses fallback LLM
+# Note: HyDE requires an LLM adapter for query expansion
 
 # Sample documents
 documents = [

@@ -29,7 +29,7 @@ corpus = [
 ]
 
 # Get a technique to test
-technique = TechniqueRegistry.get("bm25_simple")
+technique = TechniqueRegistry.get("bm25")
 
 # Run benchmark
 harness = BenchmarkHarness(quick_mode=True, verbose=True)
@@ -50,7 +50,7 @@ print(f"F1 Score: {results['metrics']['f1']:.3f}")
 python examples/benchmark_run.py --quick
 
 # Test specific techniques
-python examples/benchmark_run.py --techniques bm25_simple,dummy_dense
+python examples/benchmark_run.py --techniques bm25,dense_retriever
 
 # Use custom dataset and output location
 python examples/benchmark_run.py \
@@ -201,7 +201,7 @@ class CustomBenchmarkHarness(BenchmarkHarness):
 Compare multiple techniques systematically:
 
 ```python
-techniques_to_test = ["bm25_simple", "dummy_dense", "echo_technique"]
+techniques_to_test = ["bm25", "dense_retriever", "hyde"]
 results_list = []
 
 for technique_name in techniques_to_test:

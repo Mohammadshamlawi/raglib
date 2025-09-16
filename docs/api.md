@@ -441,27 +441,25 @@ class MMR(RAGTechnique):
 - `lambda_param`: Relevance vs. diversity trade-off (0=diversity, 1=relevance)
 - `embedder`: Embedder for computing similarities
 
-### Generation Techniques
+### Query Expansion Techniques
 
-#### LLMGenerator
+#### HyDE
 
-Generates answers using language models.
+Hypothetical Document Embeddings for improved retrieval.
 
 ```python
 @TechniqueRegistry.register
-class LLMGenerator(RAGTechnique):
-    def __init__(self, model: str = "gpt-3.5-turbo", 
-                 temperature: float = 0.1, max_tokens: int = 500):
+class HyDE(RAGTechnique):
+    def __init__(self, llm_adapter=None, temperature: float = 0.7):
         pass
     
-    def apply(self, query: str, context: List[str], 
-             prompt_template: str = None) -> TechniqueResult:
-        """Generate answer given query and context."""
+    def apply(self, query: str, top_k: int = 5) -> TechniqueResult:
+        """Generate hypothetical document for improved retrieval."""
         pass
 ```
 
 **Parameters:**
-- `model`: Model identifier
+- `llm_adapter`: LLM adapter for generating hypothetical documents
 - `temperature`: Sampling temperature
 - `max_tokens`: Maximum tokens to generate
 - `prompt_template`: Custom prompt template
