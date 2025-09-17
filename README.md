@@ -169,9 +169,14 @@ class AdvancedSemanticRetriever(RAGTechnique):
 RAGLib provides production-ready implementations across all RAG components:
 
 ### 🔨 Document Processing
-- **Fixed Size Chunking**: Configurable chunk size with overlap
-- **Sentence Window Chunking**: Sentence-based boundaries with context
-- **Semantic Chunking**: Similarity-based intelligent segmentation
+- **Content-Aware Chunking**: Content-aware chunking that respects text structure and natural boundaries
+- **Document-Specific Chunking**: Document-specific chunking that adapts to document type
+- **Fixed Size Chunking**: Fixed-size text chunking with overlap support
+- **Document-Specific Chunking**: Parent document retrieval with small-to-large chunk mapping
+- **Propositional Chunking**: Propositional chunking based on semantic propositions
+- **Recursive Chunking**: Recursive chunking with hierarchical text splitting
+- **Semantic Chunking**: Semantic similarity-based chunking with configurable embedder
+- **Sentence Window Chunking**: Sentence-based windowing with configurable window size and overlap
 
 ### 🔍 Information Retrieval  
 - **BM25 Retrieval**: Classical sparse retrieval (simple and production variants)

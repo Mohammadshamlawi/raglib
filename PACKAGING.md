@@ -48,12 +48,12 @@ The RAGLib project has been configured with modern Python packaging standards us
 ### Installation
 ```bash
 # Basic installation
-pip install raglib
+pip install rag-techlib
 
 # With optional dependencies
-pip install raglib[llm,faiss]
-pip install raglib[dev]  # For development
-pip install raglib[all]  # Everything
+pip install rag-techlib[llm,faiss]
+pip install rag-techlib[dev]  # For development
+pip install rag-techlib[all]  # Everything
 
 # Development installation
 pip install -e .
