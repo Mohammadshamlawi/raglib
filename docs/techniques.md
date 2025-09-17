@@ -98,23 +98,53 @@ To add a new technique to RAGLib:
 
 ### Chunking Techniques
 
-#### FixedSizeChunker
-- **Description**: Split documents into fixed-size chunks with optional overlap
+#### ContentAwareChunker
+- **Description**: Content-aware chunking that respects text structure and natural boundaries
 - **Category**: chunking
 - **Dependencies**: None
-- **Parameters**: `chunk_size`, `overlap`, `separator`
+- **Parameters**: `max_chunk_size`, `min_chunk_size`, `overlap`
 
-#### SemanticChunker  
-- **Description**: Creates semantically coherent chunks based on content similarity
+#### DocumentSpecificChunker
+- **Description**: Document-specific chunking that adapts to document type
 - **Category**: chunking
-- **Dependencies**: sentence-transformers
-- **Parameters**: `similarity_threshold`, `max_chunk_size`
+- **Dependencies**: None
+- **Parameters**: `max_chunk_size`, `min_chunk_size`, `overlap`
+
+#### FixedSizeChunker
+- **Description**: Fixed-size text chunking with overlap support
+- **Category**: chunking
+- **Dependencies**: None
+- **Parameters**: `chunk_size`, `overlap`
+
+#### ParentDocumentChunker
+- **Description**: Parent document retrieval with small-to-large chunk mapping
+- **Category**: chunking
+- **Dependencies**: None
+- **Parameters**: `small_chunk_size`, `large_chunk_size`, `overlap`
+
+#### PropositionalChunker
+- **Description**: Propositional chunking based on semantic propositions
+- **Category**: chunking
+- **Dependencies**: None
+- **Parameters**: `max_chunk_size`, `min_chunk_size`, `overlap`, `max_propositions_per_chunk`
+
+#### RecursiveChunker
+- **Description**: Recursive chunking with hierarchical text splitting
+- **Category**: chunking
+- **Dependencies**: None
+- **Parameters**: `chunk_size`, `overlap`, `separators`
+
+#### SemanticChunker
+- **Description**: Semantic similarity-based chunking with configurable embedder
+- **Category**: chunking
+- **Dependencies**: None
+- **Parameters**: `embedder`, `chunk_size`, `overlap`, `similarity_threshold`, `dim`
 
 #### SentenceWindowChunker
-- **Description**: Creates chunks with sentence boundaries and context windows
+- **Description**: Sentence-based windowing with configurable window size and overlap
 - **Category**: chunking
 - **Dependencies**: None
-- **Parameters**: `window_size`, `stride`
+- **Parameters**: `window_size`, `overlap_sentences`
 
 ### Retrieval Techniques
 

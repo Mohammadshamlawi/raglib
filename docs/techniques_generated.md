@@ -2,10 +2,36 @@
 
 ---
 
-**Total Techniques:** 8
+**Total Techniques:** 13
 **Categories:** 5
 
 ### Chunking
+
+#### content_aware_chunker
+
+**Content-aware chunking that respects text structure and natural boundaries**
+
+| Property | Value |
+|----------|-------|
+| Version | `1.0.0` |
+| Class | `ContentAwareChunker` |
+| Module | `raglib.techniques.content_aware_chunker` |
+| Dependencies | None |
+
+---
+
+#### document_specific_chunker
+
+**Document-specific chunking that adapts to document type**
+
+| Property | Value |
+|----------|-------|
+| Version | `1.0.0` |
+| Class | `DocumentSpecificChunker` |
+| Module | `raglib.techniques.document_specific_chunker` |
+| Dependencies | None |
+
+---
 
 #### fixed_size_chunker
 
@@ -16,6 +42,45 @@
 | Version | `1.0.0` |
 | Class | `FixedSizeChunker` |
 | Module | `raglib.techniques.fixed_size_chunker` |
+| Dependencies | None |
+
+---
+
+#### parent_document_chunker
+
+**Parent document retrieval with small-to-large chunk mapping**
+
+| Property | Value |
+|----------|-------|
+| Version | `1.0.0` |
+| Class | `ParentDocumentChunker` |
+| Module | `raglib.techniques.parent_document_chunker` |
+| Dependencies | None |
+
+---
+
+#### propositional_chunker
+
+**Propositional chunking based on semantic propositions**
+
+| Property | Value |
+|----------|-------|
+| Version | `1.0.0` |
+| Class | `PropositionalChunker` |
+| Module | `raglib.techniques.propositional_chunker` |
+| Dependencies | None |
+
+---
+
+#### recursive_chunker
+
+**Recursive chunking with hierarchical text splitting**
+
+| Property | Value |
+|----------|-------|
+| Version | `1.0.0` |
+| Class | `RecursiveChunker` |
+| Module | `raglib.techniques.recursive_chunker` |
 | Dependencies | None |
 
 ---

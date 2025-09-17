@@ -89,7 +89,133 @@ generate_result = generator.apply(
 print(f"Generated answer: {generate_result.payload['answer']}")
 ```
 
-### 2. Using the CLI
+### 2. Advanced Chunking Techniques
+
+RAGLib includes several sophisticated chunking techniques optimized for different document types:
+
+```python
+from raglib.techniques import (
+    ContentAwareChunker,
+    RecursiveChunker,
+    DocumentSpecificChunker,
+    PropositionalChunker,
+    ParentDocumentChunker
+)
+from raglib.schemas import Document
+
+# Academic paper with hierarchical structure
+document = Document(
+    id="research_paper",
+    text="""
+# Abstract
+
+This paper presents a novel approach to information retrieval.
+
+## Introduction
+
+Information retrieval has evolved significantly with the advent of neural networks.
+
+### Background
+
+Previous work has focused on traditional keyword-based approaches.
+
+## Methodology
+
+We propose a hybrid approach combining neural and symbolic methods.
+    """,
+    meta={"type": "academic", "domain": "computer_science"}
+)
+
+# Content-aware chunking respects document structure
+content_chunker = ContentAwareChunker(chunk_size=300, overlap=50)
+result = content_chunker.apply(document)
+content_chunks = result.payload["chunks"]
+
+print(f"Content-aware chunking: {len(content_chunks)} chunks")
+for chunk in content_chunks[:2]:
+    print(f"  - Chunk: {chunk.text[:100]}...")
+
+# Recursive chunking with hierarchical splitting
+recursive_chunker = RecursiveChunker(
+    chunk_size=250,
+    overlap=30,
+    separators=["\n\n", "\n", ". ", " "]  # Custom separator hierarchy
+)
+result = recursive_chunker.apply(document)
+recursive_chunks = result.payload["chunks"]
+
+print(f"Recursive chunking: {len(recursive_chunks)} chunks")
+
+# Document-specific chunking adapts to document type
+doc_chunker = DocumentSpecificChunker(chunk_size=400, overlap=40)
+result = doc_chunker.apply(document)
+doc_chunks = result.payload["chunks"]
+
+print(f"Document-specific chunking: {len(doc_chunks)} chunks")
+
+# Propositional chunking focuses on semantic units
+prop_chunker = PropositionalChunker(chunk_size=200, overlap=20)
+result = prop_chunker.apply(document)
+prop_chunks = result.payload["chunks"]
+
+print(f"Propositional chunking: {len(prop_chunks)} chunks")
+
+# Parent-document chunking maintains context hierarchy
+parent_chunker = ParentDocumentChunker(
+    child_chunk_size=150,
+    parent_chunk_size=600,
+    overlap=25
+)
+result = parent_chunker.apply(document)
+parent_data = result.payload
+
+print(f"Parent-document chunking:")
+print(f"  - Child chunks: {len(parent_data['child_chunks'])}")
+print(f"  - Parent chunks: {len(parent_data['parent_chunks'])}")
+```
+
+### 3. Comparing Chunking Strategies
+
+```python
+from raglib.registry import TechniqueRegistry
+
+# Get all chunking techniques
+chunking_techniques = TechniqueRegistry.list_by_category("chunking")
+
+# Test document
+test_doc = Document(
+    id="test",
+    text="This is a test document. It has multiple sentences and paragraphs.\n\nThis is the second paragraph with more content for testing purposes.",
+    meta={"source": "test"}
+)
+
+# Compare different chunking approaches
+print("Chunking Strategy Comparison:")
+print("-" * 40)
+
+for name, technique_class in chunking_techniques.items():
+    try:
+        chunker = technique_class(chunk_size=100, overlap=20)
+        result = chunker.apply(test_doc)
+        
+        if result.success:
+            chunks = result.payload["chunks"]
+            avg_length = sum(len(c.text) for c in chunks) / len(chunks)
+            
+            print(f"{name}:")
+            print(f"  - Chunks: {len(chunks)}")
+            print(f"  - Avg length: {avg_length:.1f} chars")
+            print(f"  - Coverage: {result.meta.get('coverage_ratio', 'N/A')}")
+        else:
+            print(f"{name}: Failed - {result.error}")
+            
+    except Exception as e:
+        print(f"{name}: Error - {e}")
+    
+    print()
+```
+
+### 4. Using the CLI
 
 RAGLib provides a command-line interface for quick experimentation:
 
@@ -100,8 +226,14 @@ raglib-cli quick-start
 # Run a specific example
 raglib-cli run-example e2e_toy
 
+# Test all chunking techniques
+python examples/chunking_benchmark.py
+
 # Build documentation
 raglib-cli docs-build
+
+# List all available techniques
+python -c "from raglib.registry import TechniqueRegistry; print('\\n'.join(TechniqueRegistry.list().keys()))"
 ```
 
 ## Core Concepts
