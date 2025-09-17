@@ -403,6 +403,74 @@ class BM25(RAGTechnique):
 - `k1`: BM25 k1 parameter (term frequency saturation)
 - `b`: BM25 b parameter (length normalization)
 
+#### TF-IDF
+
+TF-IDF retrieval technique with cosine similarity scoring.
+
+```python
+@TechniqueRegistry.register
+class TfIdf(RAGTechnique):
+    def __init__(self, normalize: bool = True, smoothing: bool = True):
+        pass
+```
+
+**Parameters:**
+- `normalize`: Whether to apply L2 normalization to vectors
+- `smoothing`: Whether to apply IDF smoothing (+1)
+
+#### LexicalMatcher
+
+Lexical matching retrieval with configurable matching modes.
+
+```python
+@TechniqueRegistry.register
+class LexicalMatcher(RAGTechnique):
+    def __init__(self, mode: str = "token_overlap", threshold: float = 0.1):
+        pass
+```
+
+**Parameters:**
+- `mode`: Matching mode ("exact", "substring", "token_overlap", "weighted_overlap")
+- `threshold`: Minimum score threshold for results
+
+**Modes:**
+- `exact`: Exact phrase matching
+- `substring`: Substring matching within documents
+- `token_overlap`: Token-level overlap scoring
+- `weighted_overlap`: Weighted token overlap with term frequency
+
+#### SPLADE
+
+SPLADE sparse-dense hybrid retrieval with term expansion.
+
+```python
+@TechniqueRegistry.register
+class Splade(RAGTechnique):
+    def __init__(self, expansion_factor: float = 0.3, 
+                 sparsity_threshold: float = 0.01):
+        pass
+```
+
+**Parameters:**
+- `expansion_factor`: Weight for expanded terms (0.0 to 1.0)
+- `sparsity_threshold`: Minimum importance for term inclusion
+
+#### LexicalTransformer
+
+Transformer-aware lexical retrieval with attention weighting.
+
+```python
+@TechniqueRegistry.register
+class LexicalTransformer(RAGTechnique):
+    def __init__(self, attention_weight: float = 0.7, 
+                 position_weight: float = 0.3):
+        pass
+```
+
+**Parameters:**
+- `attention_weight`: Weight for attention-based scoring
+- `position_weight`: Weight for positional encoding effects
+
 ### Reranking Techniques
 
 #### CrossEncoderReRanker

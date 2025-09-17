@@ -91,6 +91,64 @@ question,answer,context
 "How do you make tea?","Boil water and steep leaves","Tea preparation involves..."
 ```
 
+## Sparse Retrieval Benchmarking
+
+RAGLib includes a comprehensive set of sparse retrieval techniques that can be benchmarked and compared. These techniques use lexical matching and term-based scoring rather than dense embeddings.
+
+### Available Sparse Techniques
+
+| Technique | Description | Use Case |
+|-----------|-------------|----------|
+| **BM25** | Classic probabilistic ranking function | Baseline sparse retrieval, exact term matching |
+| **TF-IDF** | Term frequency-inverse document frequency | Statistical term weighting, cosine similarity |
+| **Lexical Matcher** | Configurable lexical matching modes | Flexible text matching (exact, substring, token overlap) |
+| **SPLADE** | Sparse lexical and dense expansion | Hybrid approach with term expansion |
+| **Lexical Transformer** | Transformer-aware lexical retrieval | Attention weighting and positional encoding |
+
+### Running Sparse Retrieval Benchmark
+
+Use the dedicated sparse retrieval benchmark script:
+
+```bash
+# Benchmark all sparse retrieval techniques
+python examples/sparse_retrieval_benchmark.py
+
+# Test specific technique
+python examples/sparse_retrieval_benchmark.py --technique bm25
+
+# Quick mode with fewer test queries  
+python examples/sparse_retrieval_benchmark.py --quick
+
+# Save results to file
+python examples/sparse_retrieval_benchmark.py --output results/sparse_benchmark.json
+```
+
+### Technique Comparison Example
+
+```python
+from raglib.registry import TechniqueRegistry
+from raglib.schemas import Document
+
+# Create test corpus
+corpus = [
+    Document(id="1", text="Machine learning algorithms learn from data"),
+    Document(id="2", text="Natural language processing handles text"),
+    Document(id="3", text="Information retrieval finds relevant documents")
+]
+
+# Test multiple sparse techniques
+sparse_techniques = TechniqueRegistry.find_by_category('sparse_retrieval')
+query = "machine learning"
+
+for name, TechniqueClass in sparse_techniques.items():
+    technique = TechniqueClass(docs=corpus)
+    result = technique.apply(query=query, top_k=3)
+    
+    if result.success:
+        hits = result.payload['hits']
+        print(f"{name}: {len(hits)} results, top score: {hits[0].score:.3f}")
+```
+
 ## Metrics
 
 The benchmark system computes three main metrics:

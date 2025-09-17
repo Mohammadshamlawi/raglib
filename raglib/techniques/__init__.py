@@ -1,6 +1,10 @@
 # techniques package — updated to include production-friendly technique modules
 __all__ = [
     "bm25",
+    "tfidf",
+    "lexical_matcher",
+    "splade",
+    "lexical_transformer",
     "dense_retriever",
     "fixed_size_chunker",
     "sentence_window_chunker",
@@ -23,9 +27,13 @@ from .dense_retriever import DenseRetriever  # noqa: F401
 from .document_specific_chunker import DocumentSpecificChunker  # noqa: F401
 from .fixed_size_chunker import FixedSizeChunker  # noqa: F401
 from .hyde import HyDE  # noqa: F401
+from .lexical_matcher import LexicalMatcher  # noqa: F401
+from .lexical_transformer import LexicalTransformer  # noqa: F401
 from .mmr import MMRReRanker  # noqa: F401
 from .parent_document_chunker import ParentDocumentChunker  # noqa: F401
 from .propositional_chunker import PropositionalChunker  # noqa: F401
 from .recursive_chunker import RecursiveChunker  # noqa: F401
 from .semantic_chunker import SemanticChunker  # noqa: F401
 from .sentence_window_chunker import SentenceWindowChunker  # noqa: F401
+from .splade import Splade  # noqa: F401
+from .tfidf import TfIdf  # noqa: F401

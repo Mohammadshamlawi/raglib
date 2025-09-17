@@ -179,7 +179,15 @@ RAGLib provides production-ready implementations across all RAG components:
 - **Sentence Window Chunking**: Sentence-based windowing with configurable window size and overlap
 
 ### 🔍 Information Retrieval  
-- **BM25 Retrieval**: Classical sparse retrieval (simple and production variants)
+
+**Sparse Retrieval Techniques:**
+- **BM25**: Classical probabilistic ranking function for sparse retrieval
+- **TF-IDF**: Term frequency-inverse document frequency with cosine similarity
+- **Lexical Matcher**: Configurable lexical matching (exact, substring, token overlap)
+- **SPLADE**: Sparse lexical and dense expansion hybrid approach
+- **Lexical Transformer**: Transformer-aware lexical retrieval with attention weighting
+
+**Dense & Hybrid Retrieval:**
 - **Dense Retrieval**: Vector-based semantic search with adapter support
 - **Hybrid Retrieval**: Combine multiple retrieval strategies
 

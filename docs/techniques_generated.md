@@ -2,7 +2,7 @@
 
 ---
 
-**Total Techniques:** 13
+**Total Techniques:** 17
 **Categories:** 5
 
 ### Chunking
@@ -180,6 +180,58 @@
 | Version | `1.0.0` |
 | Class | `BM25` |
 | Module | `raglib.techniques.bm25` |
+| Dependencies | None |
+
+---
+
+#### lexical_matcher
+
+**Lexical matching retrieval with configurable matching modes**
+
+| Property | Value |
+|----------|-------|
+| Version | `1.0.0` |
+| Class | `LexicalMatcher` |
+| Module | `raglib.techniques.lexical_matcher` |
+| Dependencies | None |
+
+---
+
+#### lexical_transformer
+
+**Transformer-aware lexical retrieval with attention weighting**
+
+| Property | Value |
+|----------|-------|
+| Version | `1.0.0` |
+| Class | `LexicalTransformer` |
+| Module | `raglib.techniques.lexical_transformer` |
+| Dependencies | None |
+
+---
+
+#### splade
+
+**SPLADE sparse-dense hybrid retrieval with term expansion**
+
+| Property | Value |
+|----------|-------|
+| Version | `1.0.0` |
+| Class | `Splade` |
+| Module | `raglib.techniques.splade` |
+| Dependencies | None |
+
+---
+
+#### tfidf
+
+**TF-IDF retrieval with cosine similarity scoring**
+
+| Property | Value |
+|----------|-------|
+| Version | `1.0.0` |
+| Class | `TfIdf` |
+| Module | `raglib.techniques.tfidf` |
 | Dependencies | None |
 
 ---

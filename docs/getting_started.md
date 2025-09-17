@@ -215,7 +215,72 @@ for name, technique_class in chunking_techniques.items():
     print()
 ```
 
-### 4. Using the CLI
+### 4. Sparse Retrieval Techniques
+
+RAGLib includes a comprehensive set of sparse retrieval techniques that use lexical matching rather than dense embeddings:
+
+```python
+from raglib.registry import TechniqueRegistry
+from raglib.schemas import Document
+
+# Create test documents
+documents = [
+    Document(id="ml", text="Machine learning algorithms learn patterns from data automatically."),
+    Document(id="nlp", text="Natural language processing helps computers understand human language."),
+    Document(id="ir", text="Information retrieval systems find relevant documents efficiently."),
+    Document(id="ai", text="Artificial intelligence encompasses machine learning and deep learning.")
+]
+
+# Get all sparse retrieval techniques
+sparse_techniques = TechniqueRegistry.find_by_category("sparse_retrieval")
+query = "machine learning algorithms"
+
+print("Sparse Retrieval Comparison:")
+print("-" * 50)
+
+for name, technique_class in sparse_techniques.items():
+    try:
+        retriever = technique_class(docs=documents)
+        result = retriever.apply(query=query, top_k=3)
+        
+        if result.success:
+            hits = result.payload["hits"]
+            top_score = hits[0].score if hits else 0.0
+            
+            print(f"{name.upper()}:")
+            print(f"  - Results: {len(hits)}")
+            print(f"  - Top score: {top_score:.4f}")
+            print(f"  - Best match: {hits[0].doc_id if hits else 'None'}")
+            
+            # Show technique-specific info
+            if name == "lexical_matcher":
+                print(f"  - Mode: {result.meta.get('mode', 'N/A')}")
+            elif name == "splade":
+                expanded = result.meta.get('expanded_terms', [])
+                print(f"  - Expanded terms: {len(expanded)}")
+            elif name == "lexical_transformer":
+                print(f"  - Attention weight: {result.meta.get('attention_weight', 'N/A')}")
+        else:
+            print(f"{name}: Failed - {result.error}")
+            
+    except Exception as e:
+        print(f"{name}: Error - {e}")
+    
+    print()
+
+# Example: Using BM25 for quick sparse retrieval
+print("Quick BM25 Example:")
+BM25 = TechniqueRegistry.get("bm25")
+bm25 = BM25(docs=documents)
+result = bm25.apply(query="information retrieval", top_k=2)
+
+if result.success:
+    for i, hit in enumerate(result.payload["hits"], 1):
+        doc = next(d for d in documents if d.id == hit.doc_id)
+        print(f"{i}. {hit.doc_id} (score: {hit.score:.3f}): {doc.text}")
+```
+
+### 5. Using the CLI
 
 RAGLib provides a command-line interface for quick experimentation:
 

@@ -1,0 +1,53 @@
+{
+  "timestamp": "2025-09-17T23:17:08.328271",
+  "technique": "bm25",
+  "dataset_path": "C:\\Users\\Moham\\Documents\\Projects\\RAGWorld\\raglib-project\\tests\\data\\tiny_qa_dataset.jsonl",
+  "corpus_size": 6,
+  "num_questions": 3,
+  "quick_mode": true,
+  "top_k": 3,
+  "runtime_seconds": 0.0,
+  "metrics": {
+    "exact_match": 0.0,
+    "f1": 0.0,
+    "overlap": 0.0
+  },
+  "individual_results": [
+    {
+      "question": "What is the capital of France?",
+      "expected_answer": "Paris",
+      "error": "BM25.apply() missing 1 required positional argument: 'self'",
+      "retrieved_count": 0,
+      "metrics": {
+        "exact_match": 0.0,
+        "f1": 0.0,
+        "overlap": 0.0
+      },
+      "metadata": {}
+    },
+    {
+      "question": "How do you make tea?",
+      "expected_answer": "Boil water, add tea leaves, steep for 3-5 minutes",
+      "error": "BM25.apply() missing 1 required positional argument: 'self'",
+      "retrieved_count": 0,
+      "metrics": {
+        "exact_match": 0.0,
+        "f1": 0.0,
+        "overlap": 0.0
+      },
+      "metadata": {}
+    },
+    {
+      "question": "What is photosynthesis?",
+      "expected_answer": "The process by which plants convert sunlight into energy",
+      "error": "BM25.apply() missing 1 required positional argument: 'self'",
+      "retrieved_count": 0,
+      "metrics": {
+        "exact_match": 0.0,
+        "f1": 0.0,
+        "overlap": 0.0
+      },
+      "metadata": {}
+    }
+  ]
+}
