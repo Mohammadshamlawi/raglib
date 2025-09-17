@@ -294,7 +294,7 @@ description = "Test package"
             assert "RAGLib 1.1.0" in content
             assert "Feature A" in content
             assert "Feature B" in content
-            assert "pip install raglib==1.1.0" in content
+            assert "pip install rag-techlib==1.1.0" in content
         finally:
             os.chdir(original_cwd)
 

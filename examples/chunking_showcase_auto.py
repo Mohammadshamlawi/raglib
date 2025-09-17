@@ -5,7 +5,7 @@ Auto-generated Chunking Showcase Script
 This script demonstrates all available chunking techniques with examples.
 Generated automatically by the RAGLib documentation updater.
 
-Generated on: 2025-09-17 22:09:34
+Generated on: 2025-09-17 22:29:17
 """
 
 import sys

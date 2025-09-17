@@ -211,7 +211,7 @@ def create_draft_release_notes(version: str, dry_run: bool = False) -> bool:
 ## Installation
 
 ```bash
-pip install raglib=={version}
+pip install rag-techlib=={version}
 ```
 
 ## Links

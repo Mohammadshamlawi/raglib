@@ -9,7 +9,7 @@ This guide will help you get up and running with RAGLib quickly.
 Install RAGLib using pip:
 
 ```bash
-pip install raglib
+pip install rag-techlib
 ```
 
 This installs the core library with lightweight default adapters.
@@ -20,16 +20,16 @@ RAGLib supports optional dependencies for different use cases:
 
 ```bash
 # For FAISS-based vector storage
-pip install raglib[faiss]
+pip install rag-techlib[faiss]
 
 # For LLM integrations (OpenAI, Transformers)
-pip install raglib[llm]
+pip install rag-techlib[llm]
 
 # For development and testing
-pip install raglib[dev]
+pip install rag-techlib[dev]
 
 # Install everything
-pip install raglib[faiss,llm,dev]
+pip install rag-techlib[faiss,llm,dev]
 ```
 
 ## Quick Start
