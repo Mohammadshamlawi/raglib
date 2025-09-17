@@ -8,6 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Sparse Retrieval Techniques** - Comprehensive sparse/lexical retrieval family
+  - **TF-IDF**: Term frequency-inverse document frequency with cosine similarity scoring
+  - **Lexical Matcher**: Configurable lexical matching with multiple modes (exact, substring, token overlap, weighted overlap)  
+  - **SPLADE**: Simplified SPLADE implementation with term expansion and sparse representations
+  - **Lexical Transformer**: Transformer-aware lexical retrieval with attention weighting and positional encoding
+- **Enhanced Documentation**
+  - Updated techniques catalog with sparse retrieval category
+  - New sparse retrieval benchmarking section and dedicated benchmark script
+  - API documentation updated with all new sparse retrieval techniques
+  - Comprehensive examples demonstrating sparse retrieval usage
+- **Benchmarking Improvements**
+  - New sparse retrieval benchmark script (`examples/sparse_retrieval_benchmark.py`)
+  - Updated main benchmark to include all sparse retrieval techniques by default
+  - Enhanced benchmarking documentation with technique comparison guides
 - Initial project structure and core framework
 - Comprehensive documentation automation system
 - Cross-platform build scripts (Makefile, PowerShell, Batch)

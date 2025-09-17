@@ -56,12 +56,20 @@ RAG techniques are organized into the following categories:
     - **When to use**: When working with large documents that need to be broken down
     - **Output**: Structured chunks with metadata
 
-=== ":material-magnify: Retrieval"
-    Find relevant information from knowledge bases
+=== ":material-search: Sparse Retrieval"
+    Find relevant information using lexical/sparse methods
     
-    - **Purpose**: Locate relevant information based on queries
-    - **When to use**: Core component of most RAG pipelines
-    - **Output**: Ranked list of relevant documents/chunks
+    - **Purpose**: Retrieve documents using term-based matching (BM25, TF-IDF, lexical matching)
+    - **When to use**: When exact term matching is important, or as a baseline/fallback for dense retrieval
+    - **Output**: Ranked list of documents with sparse similarity scores
+    - **Techniques**: BM25, TF-IDF, Lexical Matching, SPLADE, Lexical Transformer
+
+=== ":material-magnify: Retrieval"
+    Find relevant information from knowledge bases using dense methods
+    
+    - **Purpose**: Locate relevant information based on semantic similarity
+    - **When to use**: Core component of most RAG pipelines for semantic matching
+    - **Output**: Ranked list of relevant documents/chunks with embedding-based scores
 
 === ":material-target: Reranking"
     Improve retrieval quality through reordering

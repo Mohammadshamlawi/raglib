@@ -186,11 +186,17 @@ def main():
                 print(f"Available: {', '.join(sorted(available_techniques))}")
                 return 1
     else:
-        # Test a subset of reliable techniques for demo
-        techniques_to_test = [
-            t for t in ["bm25", "dense_retriever"] 
+        # Test sparse retrieval techniques for comprehensive comparison
+        sparse_techniques = [
+            t for t in ["bm25", "tfidf", "lexical_matcher", "splade", "lexical_transformer"] 
             if t in available_techniques
         ]
+        # Also include dense retrieval for comparison
+        dense_techniques = [
+            t for t in ["dense_retriever"] 
+            if t in available_techniques
+        ]
+        techniques_to_test = sparse_techniques + dense_techniques
     
     if not techniques_to_test:
         print("❌ No techniques available to test")
