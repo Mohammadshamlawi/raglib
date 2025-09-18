@@ -2,7 +2,7 @@
 
 ---
 
-**Total Techniques:** 17
+**Total Techniques:** 22
 **Categories:** 5
 
 ### Chunking
@@ -141,6 +141,19 @@
 
 ### Core Retrieval
 
+#### colbert_retriever
+
+**ColBERT-style late interaction dense retrieval**
+
+| Property | Value |
+|----------|-------|
+| Version | `1.0.0` |
+| Class | `ColBERTRetriever` |
+| Module | `raglib.techniques.colbert_retriever` |
+| Dependencies | None |
+
+---
+
 #### dense_retriever
 
 **Production-friendly dense retriever with optional adapters fallback.**
@@ -150,6 +163,45 @@
 | Version | `1.0.0` |
 | Class | `DenseRetriever` |
 | Module | `raglib.techniques.dense_retriever` |
+| Dependencies | None |
+
+---
+
+#### dual_encoder
+
+**Dual-encoder dense retrieval with separate query/doc encoding**
+
+| Property | Value |
+|----------|-------|
+| Version | `1.0.0` |
+| Class | `DualEncoder` |
+| Module | `raglib.techniques.dual_encoder` |
+| Dependencies | None |
+
+---
+
+#### faiss_retriever
+
+**FAISS-based dense retriever with efficient similarity search**
+
+| Property | Value |
+|----------|-------|
+| Version | `1.0.0` |
+| Class | `FAISSRetriever` |
+| Module | `raglib.techniques.faiss_retriever` |
+| Dependencies | None |
+
+---
+
+#### multi_vector_retriever
+
+**Multi-vector dense retrieval with document segmentation**
+
+| Property | Value |
+|----------|-------|
+| Version | `1.0.0` |
+| Class | `MultiVectorRetriever` |
+| Module | `raglib.techniques.multi_vector_retriever` |
 | Dependencies | None |
 
 ---
@@ -165,6 +217,19 @@
 | Version | `1.0.0` |
 | Class | `HyDE` |
 | Module | `raglib.techniques.hyde` |
+| Dependencies | None |
+
+---
+
+#### multi_query_retriever
+
+**Multi-query retrieval with result fusion**
+
+| Property | Value |
+|----------|-------|
+| Version | `1.0.0` |
+| Class | `MultiQueryRetriever` |
+| Module | `raglib.techniques.multi_query_retriever` |
 | Dependencies | None |
 
 ---

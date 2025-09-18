@@ -388,6 +388,131 @@ class DenseRetriever(RAGTechnique):
 - `index`: Index documents for later retrieval
 - `retrieve`: Retrieve relevant documents for a query
 
+#### FAISSRetriever
+
+High-performance vector retrieval using FAISS library with fallback support.
+
+```python
+@TechniqueRegistry.register
+class FAISSRetriever(RAGTechnique):
+    def __init__(self, embedder: Embedder, index_type: str = "flat"):
+        pass
+    
+    def apply(self, query: str, top_k: int = 5) -> TechniqueResult:
+        """Retrieve relevant chunks using FAISS similarity search."""
+        pass
+```
+
+**Parameters:**
+- `embedder`: Embedder adapter for generating vectors
+- `index_type`: FAISS index type ("flat", "ivf", "hnsw")
+
+**Features:**
+- Graceful fallback to numpy when FAISS unavailable
+- Support for multiple index types
+- High-performance similarity search
+
+#### DualEncoder
+
+Asymmetric retrieval with separate query and document encoders.
+
+```python
+@TechniqueRegistry.register
+class DualEncoder(RAGTechnique):
+    def __init__(self, query_embedder: Embedder, doc_embedder: Embedder,
+                 similarity: str = "cosine"):
+        pass
+    
+    def apply(self, query: str, top_k: int = 5) -> TechniqueResult:
+        """Retrieve using separate query and document encodings."""
+        pass
+```
+
+**Parameters:**
+- `query_embedder`: Embedder for encoding queries
+- `doc_embedder`: Embedder for encoding documents
+- `similarity`: Similarity metric ("cosine", "dot", "euclidean")
+
+**Use Cases:**
+- Asymmetric search scenarios
+- Different optimal encodings for queries vs documents
+
+#### ColBERTRetriever
+
+Token-level late interaction following ColBERT architecture.
+
+```python
+@TechniqueRegistry.register
+class ColBERTRetriever(RAGTechnique):
+    def __init__(self, embedder: Embedder, max_tokens: int = 32):
+        pass
+    
+    def apply(self, query: str, top_k: int = 5) -> TechniqueResult:
+        """Retrieve using token-level late interaction."""
+        pass
+```
+
+**Parameters:**
+- `embedder`: Embedder for token-level representations
+- `max_tokens`: Maximum tokens per text for processing
+
+**Features:**
+- Fine-grained token-level matching
+- Late interaction similarity computation
+- Max aggregation across token pairs
+
+#### MultiQueryRetriever
+
+Query expansion with multiple variations and reciprocal rank fusion.
+
+```python
+@TechniqueRegistry.register
+class MultiQueryRetriever(RAGTechnique):
+    def __init__(self, base_retriever: RAGTechnique, 
+                 num_queries: int = 3, fusion_method: str = "rrf"):
+        pass
+    
+    def apply(self, query: str, top_k: int = 5) -> TechniqueResult:
+        """Retrieve using expanded queries and result fusion."""
+        pass
+```
+
+**Parameters:**
+- `base_retriever`: Base retrieval technique to use
+- `num_queries`: Number of query variations to generate
+- `fusion_method`: Result fusion strategy ("rrf", "sum", "max")
+
+**Features:**
+- LLM-based query expansion
+- Multiple fusion strategies
+- Improved recall through query diversity
+
+#### MultiVectorRetriever
+
+Document segmentation with multi-vector representation.
+
+```python
+@TechniqueRegistry.register
+class MultiVectorRetriever(RAGTechnique):
+    def __init__(self, embedder: Embedder, segment_size: int = 100,
+                 aggregation_method: str = "max"):
+        pass
+    
+    def apply(self, query: str, top_k: int = 5) -> TechniqueResult:
+        """Retrieve using multi-vector document representation."""
+        pass
+```
+
+**Parameters:**
+- `embedder`: Embedder for segment representations
+- `segment_size`: Size of document segments
+- `aggregation_method`: Similarity aggregation ("max", "mean", "sum")
+
+**Features:**
+- Fine-grained document representation
+- Improved matching for long documents
+- Configurable aggregation strategies
+
 #### BM25
 
 BM25 retrieval technique with in-memory indexing.

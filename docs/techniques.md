@@ -64,12 +64,21 @@ RAG techniques are organized into the following categories:
     - **Output**: Ranked list of documents with sparse similarity scores
     - **Techniques**: BM25, TF-IDF, Lexical Matching, SPLADE, Lexical Transformer
 
-=== ":material-magnify: Retrieval"
-    Find relevant information from knowledge bases using dense methods
+=== ":material-magnify: Dense Retrieval"
+    Find relevant information using dense vector methods
     
-    - **Purpose**: Locate relevant information based on semantic similarity
-    - **When to use**: Core component of most RAG pipelines for semantic matching
-    - **Output**: Ranked list of relevant documents/chunks with embedding-based scores
+    - **Purpose**: Locate semantically similar information using embedding-based matching
+    - **When to use**: Primary retrieval method for semantic similarity; works with any embedder
+    - **Output**: Ranked list of relevant documents/chunks with dense similarity scores
+    - **Techniques**: FAISS retrieval, Dual Encoder retrieval, ColBERT token-level matching
+    
+=== ":material-package-variant: Retrieval Enhancement"
+    Advanced techniques that extend basic retrieval capabilities
+    
+    - **Purpose**: Improve retrieval through multi-step approaches and query enhancement
+    - **When to use**: When single-query retrieval needs enhancement or multiple perspectives
+    - **Output**: Enhanced retrieval results through query expansion or multi-vector approaches
+    - **Techniques**: Multi-Query Retrieval, Multi-Vector Retrieval
 
 === ":material-target: Reranking"
     Improve retrieval quality through reordering

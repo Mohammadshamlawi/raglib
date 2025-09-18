@@ -280,7 +280,135 @@ if result.success:
         print(f"{i}. {hit.doc_id} (score: {hit.score:.3f}): {doc.text}")
 ```
 
-### 5. Using the CLI
+### 5. Advanced Vector Retrieval Techniques
+
+RAGLib includes state-of-the-art dense retrieval techniques that use semantic embeddings for finding relevant information:
+
+```python
+from raglib.registry import TechniqueRegistry
+from raglib.schemas import Document, Chunk
+from raglib.adapters import DummyEmbedder
+
+# Sample documents for vector retrieval
+documents = [
+    Document(id="ai", text="Artificial intelligence is transforming how we process information."),
+    Document(id="ml", text="Machine learning algorithms can learn patterns from data automatically."),
+    Document(id="dl", text="Deep learning uses neural networks with multiple layers for complex tasks."),
+    Document(id="nlp", text="Natural language processing enables computers to understand human language."),
+    Document(id="cv", text="Computer vision allows machines to interpret and analyze visual information."),
+]
+
+# Convert to chunks for retrieval
+chunks = [
+    Chunk(id=doc.id, text=doc.text, start_idx=0, end_idx=len(doc.text), doc_id=doc.id)
+    for doc in documents
+]
+
+# Initialize embedder
+embedder = DummyEmbedder(dim=384)
+
+print("Advanced Vector Retrieval Techniques Showcase:")
+print("=" * 60)
+
+# 1. FAISS-based High-Performance Retrieval
+print("\n1. FAISS Retrieval (High-Performance Vector Search)")
+FaissRetriever = TechniqueRegistry.get("faiss_retriever")
+faiss_retriever = FaissRetriever(embedder=embedder, index_type="flat")
+
+# Index chunks
+faiss_retriever.add_chunks(chunks)
+result = faiss_retriever.apply(query="understanding human language", top_k=3)
+
+if result.success:
+    hits = result.payload["hits"]
+    print(f"Found {len(hits)} relevant chunks using FAISS:")
+    for i, hit in enumerate(hits, 1):
+        chunk = next(c for c in chunks if c.id == hit.doc_id)
+        print(f"  {i}. {chunk.text[:60]}... (score: {hit.score:.3f})")
+
+# 2. Dual Encoder for Asymmetric Retrieval
+print("\n2. Dual Encoder Retrieval (Asymmetric Query/Document Encoding)")
+DualEncoder = TechniqueRegistry.get("dual_encoder")
+dual_encoder = DualEncoder(
+    query_embedder=embedder,
+    doc_embedder=embedder,
+    similarity="cosine"
+)
+
+dual_encoder.add_chunks(chunks)
+result = dual_encoder.apply(query="neural networks for complex problems", top_k=3)
+
+if result.success:
+    hits = result.payload["hits"]
+    print(f"Dual encoder results:")
+    for i, hit in enumerate(hits, 1):
+        chunk = next(c for c in chunks if c.id == hit.doc_id)
+        print(f"  {i}. {chunk.text[:60]}... (score: {hit.score:.3f})")
+
+# 3. ColBERT for Token-Level Matching
+print("\n3. ColBERT Retrieval (Token-Level Late Interaction)")
+ColBERT = TechniqueRegistry.get("colbert_retriever")
+colbert = ColBERT(embedder=embedder, max_tokens=64)
+
+colbert.add_chunks(chunks)
+result = colbert.apply(query="machines analyze visual data", top_k=3)
+
+if result.success:
+    hits = result.payload["hits"]
+    print(f"ColBERT token-level matching results:")
+    for i, hit in enumerate(hits, 1):
+        chunk = next(c for c in chunks if c.id == hit.doc_id)
+        print(f"  {i}. {chunk.text[:60]}... (score: {hit.score:.3f})")
+
+# 4. Multi-Query Retrieval with Query Expansion
+print("\n4. Multi-Query Retrieval (Query Expansion & Fusion)")
+MultiQuery = TechniqueRegistry.get("multi_query_retriever")
+
+# Note: In real usage, you'd use an actual LLM for query generation
+try:
+    multi_query = MultiQuery(
+        base_retriever=faiss_retriever,
+        num_queries=3,
+        fusion_method="rrf"
+    )
+    
+    result = multi_query.apply(query="automated pattern recognition", top_k=3)
+    
+    if result.success:
+        hits = result.payload["hits"]
+        print(f"Multi-query with RRF fusion results:")
+        for i, hit in enumerate(hits, 1):
+            chunk = next(c for c in chunks if c.id == hit.doc_id)
+            print(f"  {i}. {chunk.text[:60]}... (score: {hit.score:.3f})")
+            
+except Exception as e:
+    print(f"Multi-query requires LLM adapter. Demo error: {e}")
+
+# 5. Multi-Vector Retrieval with Document Segmentation
+print("\n5. Multi-Vector Retrieval (Document Segmentation)")
+MultiVector = TechniqueRegistry.get("multi_vector_retriever")
+multi_vector = MultiVector(
+    embedder=embedder,
+    segment_size=50,
+    aggregation_method="max"
+)
+
+multi_vector.add_chunks(chunks)
+result = multi_vector.apply(query="learning from data", top_k=3)
+
+if result.success:
+    hits = result.payload["hits"]
+    print(f"Multi-vector segmentation results:")
+    for i, hit in enumerate(hits, 1):
+        chunk = next(c for c in chunks if c.id == hit.doc_id)
+        print(f"  {i}. {chunk.text[:60]}... (score: {hit.score:.3f})")
+
+print("\n" + "=" * 60)
+print("All vector retrieval techniques support the same interface!")
+print("You can swap between techniques without changing your pipeline code.")
+```
+
+### 6. Using the CLI
 
 RAGLib provides a command-line interface for quick experimentation:
 

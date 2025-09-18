@@ -123,6 +123,73 @@ python examples/sparse_retrieval_benchmark.py --quick
 python examples/sparse_retrieval_benchmark.py --output results/sparse_benchmark.json
 ```
 
+**Example Output:**
+```
+Sparse Retrieval Comparison:
+BM25:
+  - Results: 5, Top score: 2.845
+  - Best match: tech3
+TF-IDF:
+  - Results: 5, Top score: 0.712
+  - Best match: tech3
+```
+
+## Vector Retrieval Benchmarking
+
+RAGLib includes advanced vector/dense retrieval techniques that use semantic embeddings for finding relevant information. These techniques provide more nuanced understanding of query-document relationships.
+
+### Available Vector Techniques
+
+| Technique | Description | Use Case |
+|-----------|-------------|----------|
+| **FAISS Retriever** | High-performance vector search with FAISS | Large-scale similarity search, production systems |
+| **Dual Encoder** | Asymmetric query/document encoding | Different encoders for queries vs documents |
+| **ColBERT Retriever** | Token-level late interaction | Fine-grained matching, high precision |
+| **Multi-Query Retriever** | Query expansion with result fusion | Improved recall through query diversity |
+| **Multi-Vector Retriever** | Document segmentation representation | Long documents, granular matching |
+| **Dense Retriever** | Basic embedding-based retrieval | Baseline vector retrieval |
+
+### Running Vector Retrieval Benchmark
+
+Use the dedicated vector retrieval benchmark script:
+
+```bash
+# Benchmark all vector retrieval techniques
+python examples/vector_retrieval_benchmark.py
+
+# Test specific technique
+python examples/vector_retrieval_benchmark.py --technique faiss_retriever
+
+# Quick mode with fewer test queries
+python examples/vector_retrieval_benchmark.py --quick
+
+# Save results to custom file
+python examples/vector_retrieval_benchmark.py --output my_results.json
+```
+
+**Example Output:**
+```
+Performance Comparison:
+Technique            Precision  Recall   F1       NDCG     Avg Time
+----------------------------------------------------------------------
+faiss_retriever      0.667      0.600    0.632    0.745    0.012s
+dual_encoder         0.733      0.667    0.698    0.789    0.015s
+colbert_retriever    0.800      0.700    0.747    0.823    0.028s
+multi_vector_retriever 0.667    0.633    0.649    0.756    0.021s
+```
+
+### Enhanced Benchmark Comparison
+
+Compare all retrieval types (sparse and vector) side-by-side:
+
+```bash
+# Compare all retrieval techniques
+python examples/enhanced_benchmark.py
+
+# Quick comparison mode
+python examples/enhanced_benchmark.py --quick
+```
+
 ### Technique Comparison Example
 
 ```python

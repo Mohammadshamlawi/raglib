@@ -187,7 +187,12 @@ RAGLib provides production-ready implementations across all RAG components:
 - **SPLADE**: Sparse lexical and dense expansion hybrid approach
 - **Lexical Transformer**: Transformer-aware lexical retrieval with attention weighting
 
-**Dense & Hybrid Retrieval:**
+**Dense & Vector Retrieval:**
+- **FAISS Retrieval**: High-performance vector search with multiple index types and fallback support
+- **Dual Encoder Retrieval**: Asymmetric retrieval with separate query and document encoders
+- **ColBERT Retrieval**: Token-level late interaction for fine-grained matching
+- **Multi-Query Retrieval**: Query expansion with LLM and reciprocal rank fusion
+- **Multi-Vector Retrieval**: Document segmentation with multi-vector representation
 - **Dense Retrieval**: Vector-based semantic search with adapter support
 - **Hybrid Retrieval**: Combine multiple retrieval strategies
 

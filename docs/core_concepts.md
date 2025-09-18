@@ -128,16 +128,51 @@ semantic_chunker = SemanticChunker(similarity_threshold=0.8)
 - `similarity_threshold`: Minimum similarity score
 - `query_expansion`: Whether to expand queries
 
-**Examples**:
-```python
-from raglib.techniques import DenseRetriever, BM25
+**Retrieval Types**:
 
-# Dense retrieval using embeddings
-dense = DenseRetriever(top_k=10, similarity_threshold=0.7)
+=== "Dense/Vector Retrieval"
+    Uses semantic embeddings for similarity-based matching
+    
+    ```python
+    from raglib.techniques import (
+        DenseRetriever, FAISSRetriever, DualEncoder, 
+        ColBERTRetriever, MultiQueryRetriever, MultiVectorRetriever
+    )
+    
+    # Basic dense retrieval
+    dense = DenseRetriever(top_k=10, similarity_threshold=0.7)
+    
+    # High-performance FAISS search
+    faiss = FAISSRetriever(index_type="flat", top_k=10)
+    
+    # Asymmetric encoding
+    dual = DualEncoder(similarity="cosine", top_k=10)
+    
+    # Token-level interaction
+    colbert = ColBERTRetriever(max_tokens=64, top_k=10)
+    
+    # Query expansion and fusion
+    multi_query = MultiQueryRetriever(num_queries=3, fusion_method="rrf")
+    
+    # Multi-vector representation
+    multi_vector = MultiVectorRetriever(segment_size=100, aggregation_method="max")
+    ```
 
-# Sparse retrieval using BM25
-sparse = BM25(top_k=10)
-```
+=== "Sparse Retrieval"
+    Uses lexical/term-based matching
+    
+    ```python
+    from raglib.techniques import BM25, TfIdf, LexicalMatcher
+    
+    # BM25 probabilistic ranking
+    bm25 = BM25(k1=1.2, b=0.75, top_k=10)
+    
+    # TF-IDF with cosine similarity
+    tfidf = TfIdf(top_k=10)
+    
+    # Flexible lexical matching
+    lexical = LexicalMatcher(mode="token_overlap", top_k=10)
+    ```
 
 ### Reranking Techniques
 

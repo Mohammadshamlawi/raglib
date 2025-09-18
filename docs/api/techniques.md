@@ -10,6 +10,11 @@ This page provides detailed API documentation for all RAGLib techniques organize
 | SemanticChunker | Chunking | Semantically-aware chunking | `similarity_threshold` |
 | SentenceWindowChunker | Chunking | Sentence-based windowing | `window_size`, `step_size` |
 | DenseRetriever | Retrieval | Embedding-based retrieval | `top_k`, `similarity_threshold` |
+| FAISSRetriever | Retrieval | High-performance vector search | `index_type`, `top_k` |
+| DualEncoder | Retrieval | Asymmetric query/doc encoding | `similarity`, `top_k` |
+| ColBERTRetriever | Retrieval | Token-level late interaction | `max_tokens`, `top_k` |
+| MultiQueryRetriever | Retrieval | Query expansion with fusion | `num_queries`, `fusion_method` |
+| MultiVectorRetriever | Retrieval | Multi-vector document representation | `segment_size`, `aggregation_method` |
 | BM25 | Retrieval | Keyword-based retrieval | `top_k`, `k1`, `b` |
 | CrossEncoderReRanker | Reranking | Neural reranking | `model_name`, `top_k` |
 | MMRReRanker | Reranking | Diversity-aware reranking | `diversity_lambda` |
